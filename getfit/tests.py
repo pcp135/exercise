@@ -36,3 +36,4 @@ class ModelTests(TestCase):
 		
 		self.assertEquals(all_measures[0].name, "Reps")
 		self.assertEquals(all_measures[0].exercise, self.exer)
+		self.assertEquals(all_measures[0].exercise.name, "Test exercise")		
