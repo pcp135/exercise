@@ -5,4 +5,4 @@ class Exercise(models.Model):
 	
 class Measure(models.Model):
 	name = models.CharField(max_length=100)
-	exercise = models.ForeignKey(Exercise)
+	exercise = models.ManyToManyField(Exercise)
