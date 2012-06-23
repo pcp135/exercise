@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.utils import timezone
+from getfit.models import Exercise
 
 class SimpleTest(TestCase):
 	def test_basic_addition(self):
