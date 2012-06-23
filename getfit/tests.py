@@ -1,13 +1,6 @@
 from django.test import TestCase
 from django.utils import timezone
-from getfit.models import Exercise, Measure
-
-class SimpleTest(TestCase):
-	def test_basic_addition(self):
-		"""
-		Tests that 1 + 1 always equals 2.
-		"""
-		self.assertEqual(1 + 1, 2)
+from getfit.models import Exercise, Measure, Workout
 
 class ModelTests(TestCase):
 	def setUp(self):
@@ -29,6 +22,12 @@ class ModelTests(TestCase):
 		self.exer2.name = "Jumping"
 		self.exer2.save()		
 		self.meas2.exercise.add(self.exer2)
+		
+		self.work = Workout()
+		self.worktime = timezone.now()
+		self.work.time_of_workout = self.worktime
+		self.work.exercise = self.exer
+		self.work.save()
 		
 	def test_creating_a_new_exercise(self):
 		all_exercises = Exercise.objects.all()
@@ -58,3 +57,12 @@ class ModelTests(TestCase):
 		
 		self.assertNotIn("Reps", measures)
 		self.assertIn("Height", measures)
+		
+	def test_creating_a_new_workout(self):
+		all_workouts = Workout.objects.all()
+		self.assertEquals(len(all_workouts),1)
+		
+		self.assertEquals(self.work, all_workouts[0])
+		self.assertEquals("Test exercise", all_workouts[0].exercise.name)
+		self.assertEquals(self.worktime, all_workouts[0].time_of_workout)
+		
