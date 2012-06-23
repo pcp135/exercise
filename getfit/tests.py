@@ -24,11 +24,15 @@ class ModelTests(TestCase):
 		self.meas2.name = "Height"
 		self.meas2.save()
 		self.meas2.exercise.add(self.exer)
-		
+
+		self.exer2 = Exercise()
+		self.exer2.name = "Jumping"
+		self.exer2.save()		
+		self.meas2.exercise.add(self.exer2)
 		
 	def test_creating_a_new_exercise(self):
 		all_exercises = Exercise.objects.all()
-		self.assertEquals(len(all_exercises),1)
+		self.assertEquals(len(all_exercises),2)
 		
 		self.assertEquals(self.exer, all_exercises[0])
 		
@@ -48,4 +52,9 @@ class ModelTests(TestCase):
 		measures = [v.name for v in self.exer.measure_set.all()]
 		
 		self.assertIn("Reps", measures)
+		self.assertIn("Height", measures)
+
+		measures = [v.name for v in self.exer2.measure_set.all()]
+		
+		self.assertNotIn("Reps", measures)
 		self.assertIn("Height", measures)
