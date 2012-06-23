@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.utils import timezone
-from getfit.models import Exercise, Measure, Workout
+from getfit.models import Exercise, Measure, Workout, Score
 
 class ModelTests(TestCase):
 	def setUp(self):
@@ -28,6 +28,12 @@ class ModelTests(TestCase):
 		self.work.time_of_workout = self.worktime
 		self.work.exercise = self.exer
 		self.work.save()
+		
+		self.score = Score()
+		self.score.workout = self.work
+		self.score.measure = self.meas
+		self.score.result = 10
+		self.score.save()
 		
 	def test_creating_a_new_exercise(self):
 		all_exercises = Exercise.objects.all()
@@ -65,4 +71,13 @@ class ModelTests(TestCase):
 		self.assertEquals(self.work, all_workouts[0])
 		self.assertEquals("Test exercise", all_workouts[0].exercise.name)
 		self.assertEquals(self.worktime, all_workouts[0].time_of_workout)
+		
+	def test_adding_a_new_score(self):
+		all_scores = Score.objects.all()
+		self.assertEquals(len(all_scores),1)
+
+		self.assertEquals(self.score, all_scores[0])
+		self.assertEquals("Test exercise", all_scores[0].workout.exercise.name)
+		self.assertEquals("Reps", all_scores[0].measure.name)
+		self.assertEquals(10, all_scores[0].result)
 		

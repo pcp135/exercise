@@ -10,3 +10,8 @@ class Measure(models.Model):
 class Workout(models.Model):
 	exercise = models.ForeignKey(Exercise)
 	time_of_workout = models.DateTimeField()
+	
+class Score(models.Model):
+	workout = models.ForeignKey(Workout)
+	measure = models.ForeignKey(Measure)
+	result = models.IntegerField()
