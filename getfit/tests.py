@@ -17,7 +17,7 @@ class ModelTests(TestCase):
 		
 		self.meas = Measure()
 		self.meas.name = "Reps"
-		self.meas.exercise = exer
+		self.meas.exercise = self.exer
 		self.meas.save()
 		
 	def test_creating_a_new_exercise(self):
