@@ -92,3 +92,9 @@ class ModelTests(TestCase):
 		self.assertEquals("Height", all_scores[1].measure.name)
 		self.assertEquals(20, all_scores[1].result)
 		
+	def test_objects_should_have_unicode_output(self):
+		self.assertEquals(u"Test exercise", unicode(self.exer))
+		self.assertEquals(u"Reps", unicode(self.meas))
+		self.assertEquals(u"Test exercise @ " + str(self.worktime), unicode(self.work))
+		self.assertEquals(u"10 Reps", unicode(self.score))
+		
