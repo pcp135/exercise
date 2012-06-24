@@ -1,4 +1,12 @@
 from django.contrib import admin
 from getfit.models import *
 
-admin.site.register(Exercise, Measure, Score, Workout)
+class ScoreInline(admin.StackedInline):
+	model = Score
+	extra = 4
+	
+class WorkoutAdmin(admin.ModelAdmin):
+	inlines = [ScoreInline]
+
+admin.site.register(Exercise)
+admin.site.register(Workout, WorkoutAdmin)
