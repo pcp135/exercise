@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.utils import timezone
 from getfit.models import Exercise, Measure, Workout, Score
 from django.core.urlresolvers import reverse
+import pytz
 
 class ModelTests(TestCase):
 	def setUp(self):
@@ -136,4 +137,15 @@ class ViewTests(TestCase):
 		self.assertIn(work1_url, response.content)
 		work2_url = reverse('getfit.views.workout', args=[self.work2.id,])
 		self.assertIn(work2_url, response.content)
+		
+	def test_workout_page_lists_exercise_and_date_and_time_of_workout(self):
+		response = self.client.get('/workout/%d/' % self.work2.id)
+		self.assertIn(self.work2.exercise.name, response.content)
+		self.assertIn(self.work2.time_of_workout.strftime("%A %d %B %Y"), response.content)
+		eastern=pytz.timezone('US/Eastern')
+		self.assertIn(self.work2.time_of_workout.astimezone(eastern).strftime("%H:%M"), response.content)
+		
+		
+		
+		
 		
