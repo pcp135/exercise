@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.utils import timezone
 from getfit.models import Exercise, Measure, Workout, Score
+from django.core.urlresolvers import reverse
 
 class ModelTests(TestCase):
 	def setUp(self):
@@ -128,3 +129,11 @@ class ViewTests(TestCase):
 		response = self.client.get('/workout/%d/' % self.work2.id)
 		template_names_used = [t.name for t in response.templates]
 		self.assertIn('workout.html', template_names_used)
+		
+	def test_home_page_links_to_workout_pages(self):
+		response = self.client.get('/')
+		work1_url = reverse('getfit.views.workout', args=[self.work1.id,])
+		self.assertIn(work1_url, response.content)
+		work2_url = reverse('getfit.views.workout', args=[self.work2.id,])
+		self.assertIn(work2_url, response.content)
+		
