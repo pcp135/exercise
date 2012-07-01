@@ -98,7 +98,7 @@ class ModelTests(TestCase):
 		self.assertEquals(u"Test exercise @ " + str(self.worktime), unicode(self.work))
 		self.assertEquals(u"10 Reps", unicode(self.score))
 		
-class HomePageViewTest(TestCase):
+class ViewTests(TestCase):
 	def setUp(self):
 		self.exer1 = Exercise(name = 'Testing')
 		self.exer1.save()
@@ -124,3 +124,7 @@ class HomePageViewTest(TestCase):
 		self.assertIn(self.work1.time_of_workout.strftime("%A %d %B %Y"), response.content)
 		self.assertIn(self.work2.time_of_workout.strftime("%A %d %B %Y"), response.content)
 		
+	def test_workout_page_exists_and_uses_correct_template(self):
+		response = self.client.get('/workout/%d/' % self.work2.id)
+		template_names_used = [t.name for t in response.templates]
+		self.assertIn('workout.html', template_names_used)

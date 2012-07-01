@@ -6,8 +6,8 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # Examples:
-    url(r'^$', 'getfit.views.home', name='home'),
-    # url(r'^exercise/', include('exercise.foo.urls')),
+    url(r'^$', 'getfit.views.home'),
+    url(r'^workout/(\d+)/$', 'getfit.views.workout'),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
