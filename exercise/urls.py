@@ -6,7 +6,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # Examples:
-    # url(r'^$', 'exercise.views.home', name='home'),
+    url(r'^$', 'getfit.views.home', name='home'),
     # url(r'^exercise/', include('exercise.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:

@@ -1,7 +1,7 @@
 from django.contrib import admin
 from getfit.models import *
 
-class ScoreInline(admin.StackedInline):
+class ScoreInline(admin.TabularInline):
 	model = Score
 	extra = 4
 	

@@ -98,3 +98,29 @@ class ModelTests(TestCase):
 		self.assertEquals(u"Test exercise @ " + str(self.worktime), unicode(self.work))
 		self.assertEquals(u"10 Reps", unicode(self.score))
 		
+class HomePageViewTest(TestCase):
+	def setUp(self):
+		self.exer1 = Exercise(name = 'Testing')
+		self.exer1.save()
+		
+		self.exer2 = Exercise(name = "Hitting")
+		self.exer2.save()
+		
+		self.work1=Workout(exercise = self.exer1, time_of_workout = timezone.now())
+		self.work1.save()
+
+		self.work2=Workout(exercise = self.exer2, time_of_workout = timezone.now())
+		self.work2.save()
+	
+	def test_home_page_exists_and_uses_correct_template(self):
+		response = self.client.get('/')
+		template_names_used = [t.name for t in response.templates]
+		self.assertIn('home.html', template_names_used)
+		
+	def test_home_page_displays_exercises_and_dates(self):
+		response = self.client.get('/')
+		self.assertIn(self.work1.exercise.name, response.content)
+		self.assertIn(self.work2.exercise.name, response.content)
+#		self.assertIn(self.work1.time_of_workout.strftime(%d/%m/&y), response.content)
+#		self.assertIn(self.work2.time_of_workout..strftime(%d/%m/&y), response.content)
+		
