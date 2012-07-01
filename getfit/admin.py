@@ -10,3 +10,4 @@ class WorkoutAdmin(admin.ModelAdmin):
 
 admin.site.register(Exercise)
 admin.site.register(Workout, WorkoutAdmin)
+admin.site.register(Measure)
