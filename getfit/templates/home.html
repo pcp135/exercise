@@ -1,8 +1,10 @@
 <html>
 	<body>
 		<h1>Workouts</h1>
+		<ul>
 		{% for workout in workouts %}
-			<ul><a href= "{% url getfit.views.workout workout.id %}">{{ workout.exercise }}</a> on {{ workout.time_of_workout|date:"l d F Y" }}</ul>
+			<li><a href= "{% url getfit.views.workout workout.id %}">{{ workout.exercise }}</a> on {{ workout.time_of_workout|date:"l d F Y" }}</li>
 		{% endfor %}
+		</ul>
 	</body>
 </html>

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from getfit.models import Workout
+from getfit.models import Workout, Score
 
 def home(request):
 	return render(request, 'home.html', {'workouts': Workout.objects.all()})

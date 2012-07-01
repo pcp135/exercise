@@ -113,7 +113,17 @@ class ViewTests(TestCase):
 
 		self.work2=Workout(exercise = self.exer2, time_of_workout = timezone.now())
 		self.work2.save()
-	
+		
+		self.meas1=Measure(name = "Reps")
+		self.meas1.save()
+		
+		self.meas2=Measure(name = "Time")
+		self.meas2.save()
+		
+		self.exer1.measure.add(self.meas1)
+		self.exer1.measure.add(self.meas2)
+		self.exer2.measure.add(self.meas2)	
+
 	def test_home_page_exists_and_uses_correct_template(self):
 		response = self.client.get('/')
 		template_names_used = [t.name for t in response.templates]
@@ -144,6 +154,17 @@ class ViewTests(TestCase):
 		self.assertIn(self.work2.time_of_workout.strftime("%A %d %B %Y"), response.content)
 		eastern=pytz.timezone('US/Eastern')
 		self.assertIn(self.work2.time_of_workout.astimezone(eastern).strftime("%H:%M"), response.content)
+		
+	def test_workout_lists_each_score(self):
+		score1=Score(workout=self.work1, measure=self.meas1, result=2201)
+		score1.save()
+		score2=Score(workout=self.work1, measure=self.meas2, result=3220)
+		score2.save()
+		response = self.client.get('/workout/%d/' % self.work1.id)
+		self.assertIn(self.meas1.name, response.content)
+		self.assertIn(score2.measure.name, response.content)
+		self.assertIn(str(score1.result), response.content)
+		self.assertIn(u"3220", response.content)
 		
 		
 		
