@@ -1,0 +1,2 @@
+set different databases for different environments
+write functional tests to check webpage
