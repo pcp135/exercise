@@ -121,6 +121,6 @@ class HomePageViewTest(TestCase):
 		response = self.client.get('/')
 		self.assertIn(self.work1.exercise.name, response.content)
 		self.assertIn(self.work2.exercise.name, response.content)
-#		self.assertIn(self.work1.time_of_workout.strftime(%d/%m/&y), response.content)
-#		self.assertIn(self.work2.time_of_workout..strftime(%d/%m/&y), response.content)
+		self.assertIn(self.work1.time_of_workout.strftime("%A %d %B %Y"), response.content)
+		self.assertIn(self.work2.time_of_workout.strftime("%A %d %B %Y"), response.content)
 		

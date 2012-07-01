@@ -2,7 +2,7 @@
 	<body>
 		<h1>Workouts</h1>
 		{% for workout in workouts %}
-			<ul>{{ workout.exercise }}</ul>
+			<ul>{{ workout.exercise }} on {{ workout.time_of_workout|date:"l d F Y" }}</ul>
 		{% endfor %}
 	</body>
 </html>
