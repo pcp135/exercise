@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.utils import timezone
 from getfit.models import Exercise, Measure, Workout, Score
+from getfit.forms import WorkoutScoreForm
 from django.core.urlresolvers import reverse
 import pytz
 
@@ -124,6 +125,11 @@ class ViewTests(TestCase):
 		self.exer1.measure.add(self.meas2)
 		self.exer2.measure.add(self.meas2)	
 
+		self.score1=Score(workout=self.work1, measure=self.meas1, result=2201)
+		self.score1.save()
+		self.score2=Score(workout=self.work1, measure=self.meas2, result=3220)
+		self.score2.save()
+
 	def test_home_page_exists_and_uses_correct_template(self):
 		response = self.client.get('/')
 		template_names_used = [t.name for t in response.templates]
@@ -131,10 +137,11 @@ class ViewTests(TestCase):
 		
 	def test_home_page_displays_exercises_and_dates(self):
 		response = self.client.get('/')
+		eastern=pytz.timezone('US/Eastern')
 		self.assertIn(self.work1.exercise.name, response.content)
 		self.assertIn(self.work2.exercise.name, response.content)
-		self.assertIn(self.work1.time_of_workout.strftime("%A %d %B %Y"), response.content)
-		self.assertIn(self.work2.time_of_workout.strftime("%A %d %B %Y"), response.content)
+		self.assertIn(self.work1.time_of_workout.astimezone(eastern).strftime("%A %d %B %Y"), response.content)
+		self.assertIn(self.work2.time_of_workout.astimezone(eastern).strftime("%A %d %B %Y"), response.content)
 		
 	def test_workout_page_exists_and_uses_correct_template(self):
 		response = self.client.get('/workout/%d/' % self.work2.id)
@@ -150,23 +157,22 @@ class ViewTests(TestCase):
 		
 	def test_workout_page_lists_exercise_and_date_and_time_of_workout(self):
 		response = self.client.get('/workout/%d/' % self.work2.id)
-		self.assertIn(self.work2.exercise.name, response.content)
-		self.assertIn(self.work2.time_of_workout.strftime("%A %d %B %Y"), response.content)
 		eastern=pytz.timezone('US/Eastern')
+		self.assertIn(self.work2.exercise.name, response.content)
+		self.assertIn(self.work2.time_of_workout.astimezone(eastern).strftime("%A %d %B %Y"), response.content)
 		self.assertIn(self.work2.time_of_workout.astimezone(eastern).strftime("%H:%M"), response.content)
 		
 	def test_workout_lists_each_score(self):
-		score1=Score(workout=self.work1, measure=self.meas1, result=2201)
-		score1.save()
-		score2=Score(workout=self.work1, measure=self.meas2, result=3220)
-		score2.save()
 		response = self.client.get('/workout/%d/' % self.work1.id)
 		self.assertIn(self.meas1.name, response.content)
-		self.assertIn(score2.measure.name, response.content)
-		self.assertIn(str(score1.result), response.content)
+		self.assertIn(self.score2.measure.name, response.content)
+		self.assertIn(str(self.score1.result), response.content)
 		self.assertIn(u"3220", response.content)
 		
-		
+	def test_workout_page_has_a_form(self):
+		form = WorkoutScoreForm(self.work1)
+		self.assertEqual(form.fields.keys(), [self.score1.measure.name, self.score2.measure.name])
+		self.assertEqual([form.fields[c].initial for c in form.fields], [2201, 3220])
 		
 		
 		
