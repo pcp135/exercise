@@ -1,0 +1,4 @@
+*.sqlite
+*.pyc
+login.py
+adminUser.json
