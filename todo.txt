@@ -1,5 +1,4 @@
 write functional tests to check webpage
-add tests for scores showing up
 allow scores to be edited in the workout page
 allow a new workout to be added
 
