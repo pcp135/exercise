@@ -42,8 +42,8 @@ class ModelTests(TestCase):
 		self.score2.workout = self.work
 		self.score2.measure = self.meas2
 		self.score2.result = 20
-		self.score2.save()
-		
+		self.score2.save()	
+
 	def test_creating_a_new_exercise(self):
 		all_exercises = Exercise.objects.all()
 		self.assertEquals(len(all_exercises),2)
@@ -174,5 +174,13 @@ class ViewTests(TestCase):
 		self.assertEqual(form.fields.keys(), [self.score1.measure.name, self.score2.measure.name])
 		self.assertEqual([form.fields[c].initial for c in form.fields], [2201, 3220])
 		
-		
+	def test_workout_can_handle_a_change_via_POST(self):
+		post_data = {'Reps': str(22022), 'Time': str(4331)}
+		workout_url = '/workout/%d/' % self.work1.id
+		response=self.client.post(workout_url, data=post_data)
+
+		changedWorkout = Workout.objects.get(pk=self.work1.id)
+		self.assertEquals(changedWorkout.score_set.all()[0].result, 22022)
+		self.assertEquals(changedWorkout.score_set.all()[1].result, 4331)
+		self.assertRedirects(response, workout_url)
 		

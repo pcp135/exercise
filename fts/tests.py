@@ -113,3 +113,29 @@ class ExerciseTest(LiveServerTestCase):
 		self.assertIn('Width', body.text)
 		self.assertIn('67890', self.browser.page_source)
 
+	def test_navigating_directly_to_workout_works(self):
+		self.browser.get(self.live_server_url + '/workout/1/')
+
+		body = self.browser.find_element_by_tag_name('body')
+
+		self.assertIn('Jumping', body.text)
+		self.assertIn('Length', body.text)
+		self.assertIn('12345', self.browser.page_source)
+
+	def test_editing_a_workout_works(self):
+		self.browser.get(self.live_server_url + '/workout/1/')
+
+		result_field = self.browser.find_element_by_name('Length')
+		result_field.clear()
+		result_field.send_keys('345678')
+		save_button = self.browser.find_element_by_xpath("//input[@type='submit']")
+		save_button.click()
+
+		body = self.browser.find_element_by_tag_name('body')
+		self.assertIn('Jumping', body.text)
+		self.assertIn('Length', body.text)
+		self.assertIn('345678', self.browser.page_source)
+
+		self.browser.get(self.live_server_url + '/workout/1/')
+		body = self.browser.find_element_by_tag_name('body')
+		self.assertIn('345678', self.browser.page_source)
