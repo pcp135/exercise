@@ -3,11 +3,6 @@
 	<body>
 		<h1>{{ workout.exercise.name }}</h1>
 		<h2>{{ workout.time_of_workout|localtime|date:"l d F Y @ H:i" }}</h2>
-		<ul>
-			{% for score in workout.score_set.all %}
-			<li>{{ score.measure.name }} - {{ score.result }}</li>
-			{% endfor %}
-		</ul>
 		<form method="POST" action="">
 			{% csrf_token %}
 			{{ form.as_p }}
