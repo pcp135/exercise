@@ -205,3 +205,21 @@ class ViewTests(TestCase):
 		response = self.client.get('/workout/add/')		
 		self.assertTrue(isinstance(response.context['form'], NewWorkoutForm))
 		
+	def test_add_view_can_create_a_new_workout(self):
+		post_data = {'exercise': str(self.exer1.id), 'time_of_workout': str(timezone.now())}
+		response = self.client.post('/workout/add/', data=post_data)
+		self.assertEquals(len(Workout.objects.all()), 3)
+		self.assertRedirects(response, '/workout/3/')
+
+		post_data = {'exercise': str(self.exer2.id), 'time_of_workout': str(timezone.now())}
+		response = self.client.post('/workout/add/', data=post_data)
+		self.assertEquals(len(Workout.objects.all()), 4)
+
+		response = self.client.get('/workout/3/')		
+		self.assertIn("Reps:", response.content)
+		self.assertIn("Time:", response.content)
+		
+		response = self.client.get('/workout/4/')		
+		self.assertNotIn("Reps:", response.content)
+		self.assertIn("Time:", response.content)
+		
