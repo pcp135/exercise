@@ -23,7 +23,7 @@ class Workout(models.Model):
 class Score(models.Model):
 	workout = models.ForeignKey(Workout)
 	measure = models.ForeignKey(Measure)
-	result = models.IntegerField()
+	result = models.DecimalField(decimal_places=2, max_digits=10)
 	
 	def __unicode__(self):
 		return str(self.result) + " " + self.measure.name
