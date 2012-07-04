@@ -1,8 +1,9 @@
 from django.test import TestCase
 from django.utils import timezone
 from getfit.models import Exercise, Measure, Workout, Score
-from getfit.forms import WorkoutScoreForm
+from getfit.forms import WorkoutScoreForm, NewWorkoutForm
 from django.core.urlresolvers import reverse
+from datetime import timedelta
 import pytz
 
 class ModelTests(TestCase):
@@ -173,6 +174,8 @@ class ViewTests(TestCase):
 		form = WorkoutScoreForm(self.work1)
 		self.assertEqual(form.fields.keys(), [self.score1.measure.name, self.score2.measure.name])
 		self.assertEqual([form.fields[c].initial for c in form.fields], [2201, 3220])
+		response = self.client.get('/workout/%d/' % (self.work1.id, ))		
+		self.assertTrue(isinstance(response.context['form'], WorkoutScoreForm))
 		
 	def test_workout_can_handle_a_change_via_POST(self):
 		post_data = {'Reps': str(22022), 'Time': str(4331)}
@@ -183,4 +186,22 @@ class ViewTests(TestCase):
 		self.assertEquals(changedWorkout.score_set.all()[0].result, 22022)
 		self.assertEquals(changedWorkout.score_set.all()[1].result, 4331)
 		self.assertRedirects(response, workout_url)
+		
+	def test_homepage_has_a_link_to_add_new_workout(self):
+		response = self.client.get('/')
+		add_url = reverse('getfit.views.add')
+		self.assertIn(add_url, response.content)
+		
+	def test_add_page_exists_and_uses_correct_template(self):
+		response = self.client.get('/workout/add/')
+		template_names_used = [t.name for t in response.templates]
+		self.assertIn('add.html', template_names_used)
+
+	def test_add_page_has_a_form(self):
+		form = NewWorkoutForm()
+		self.assertEqual(form.fields.keys(), ["exercise","time_of_workout"])
+		self.assertEqual(form.fields["exercise"].initial, None)
+		self.assertTrue(abs(form.fields["time_of_workout"].initial-timezone.now())<timedelta(seconds=2))
+		response = self.client.get('/workout/add/')		
+		self.assertTrue(isinstance(response.context['form'], NewWorkoutForm))
 		

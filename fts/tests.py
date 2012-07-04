@@ -139,3 +139,17 @@ class ExerciseTest(LiveServerTestCase):
 		self.browser.get(self.live_server_url + '/workout/1/')
 		body = self.browser.find_element_by_tag_name('body')
 		self.assertIn('345678', self.browser.page_source)
+	
+	def test_adding_a_new_workout(self):
+		self.browser.get(self.live_server_url)
+
+		self.browser.find_element_by_link_text("Add a new workout").click()
+		self.browser.find_element_by_xpath("//option[@value='1']").click()
+		save_button = self.browser.find_element_by_xpath("//input[@type='submit']")
+		save_button.click()
+
+		body = self.browser.find_element_by_tag_name('body')
+		self.assertIn('Jumping', body.text)
+		self.assertIn('Length', body.text)
+		
+		

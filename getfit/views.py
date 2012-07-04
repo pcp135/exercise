@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from getfit.models import Workout, Score
-from getfit.forms import WorkoutScoreForm
+from getfit.forms import WorkoutScoreForm, NewWorkoutForm
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 
@@ -18,3 +18,7 @@ def workout(request, workout_id):
 	form = WorkoutScoreForm(workout)
 	context = {'workout': workout, 'form': form}
 	return render(request, 'workout.html', context)	
+	
+def add(request):
+	form = NewWorkoutForm()
+	return render(request, 'add.html', {'form': form})

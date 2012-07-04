@@ -1,0 +1,10 @@
+<html>
+	<body>
+		<h1>New Workout</h1>
+		<form method="POST" action="">
+			{% csrf_token %}
+			{{ form.as_p }}
+			<input type = "submit">
+		</form>
+	</body>
+</html>
