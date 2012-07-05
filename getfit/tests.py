@@ -185,7 +185,7 @@ class ViewTests(TestCase):
 		changedWorkout = Workout.objects.get(pk=self.work1.id)
 		self.assertEquals(changedWorkout.score_set.all()[0].result, 22022)
 		self.assertEquals(changedWorkout.score_set.all()[1].result, 4331)
-		self.assertRedirects(response, workout_url)
+		self.assertRedirects(response, '/')
 		
 	def test_homepage_has_a_link_to_add_new_workout(self):
 		response = self.client.get('/')
@@ -201,17 +201,16 @@ class ViewTests(TestCase):
 		form = NewWorkoutForm()
 		self.assertEqual(form.fields.keys(), ["exercise","time_of_workout"])
 		self.assertEqual(form.fields["exercise"].initial, None)
-		self.assertTrue(abs(form.fields["time_of_workout"].initial-timezone.now())<timedelta(seconds=2))
 		response = self.client.get('/workout/add/')		
 		self.assertTrue(isinstance(response.context['form'], NewWorkoutForm))
 		
 	def test_add_view_can_create_a_new_workout(self):
-		post_data = {'exercise': str(self.exer1.id), 'time_of_workout': str(timezone.now())}
+		post_data = {'exercise': str(self.exer1.id), 'time_of_workout': "2010-05-01 15:15"}
 		response = self.client.post('/workout/add/', data=post_data)
 		self.assertEquals(len(Workout.objects.all()), 3)
 		self.assertRedirects(response, '/workout/3/')
 
-		post_data = {'exercise': str(self.exer2.id), 'time_of_workout': str(timezone.now())}
+		post_data = {'exercise': str(self.exer2.id), 'time_of_workout': "2010-05-01 16:16"}
 		response = self.client.post('/workout/add/', data=post_data)
 		self.assertEquals(len(Workout.objects.all()), 4)
 

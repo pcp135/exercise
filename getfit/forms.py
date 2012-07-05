@@ -10,10 +10,5 @@ class WorkoutScoreForm(forms.Form):
 			self.fields[score.measure.name] = forms.DecimalField(initial = score.result)
 
 class NewWorkoutForm(forms.Form):
-	exercise = forms.ChoiceField()
+	exercise = forms.ChoiceField(choices = [(0,"----")]+[(ex.id, ex.name) for ex in Exercise.objects.all()])
 	time_of_workout = forms.DateTimeField()
-
-	def __init__(self):
-		forms.Form.__init__(self)
-		self.fields['exercise'].choices = [(ex.id, ex.name) for ex in Exercise.objects.all()]
-		self.fields['time_of_workout'].initial =  timezone.now()
