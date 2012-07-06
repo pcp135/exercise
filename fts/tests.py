@@ -83,7 +83,7 @@ class ExerciseTest(LiveServerTestCase):
 	
 		self.browser.find_element_by_link_text('Log out').click()
 		
-	def test_homepage_includes_admin_setup_workouts_and_following_links_workouts(self):
+	def test_flow_through_the_site(self):
 		
 		#Visit main page
 		self.browser.get(self.live_server_url)
