@@ -1,6 +1,6 @@
 from django import forms
 from django.utils import timezone
-from getfit.models import Exercise
+from getfit.models import Workout
 
 class WorkoutScoreForm(forms.Form):
 	
@@ -9,6 +9,6 @@ class WorkoutScoreForm(forms.Form):
 		for score in workout.score_set.all():
 			self.fields[score.measure.name] = forms.DecimalField(initial = score.result)
 
-class NewWorkoutForm(forms.Form):
-	exercise = forms.ChoiceField(choices = [(0,"----")]+[(ex.id, ex.name) for ex in Exercise.objects.all()])
-	time_of_workout = forms.DateTimeField()
+class NewWorkoutForm(forms.ModelForm):
+	class Meta:
+		model = Workout

@@ -25,14 +25,12 @@ def add(request):
 	if request.method == 'POST':
 		form = NewWorkoutForm(request.POST)
 		if form.is_valid():
-			workout=Workout()
-			workout.exercise=Exercise.objects.get(id = form.cleaned_data['exercise'])
-			workout.time_of_workout = form.cleaned_data['time_of_workout']
-			workout.save()
+			workout=form.save()
 			for meas in workout.exercise.measure.all():
-				score = Score(workout=workout, measure=meas, result=0)
-				score.save()
+				Score(workout=workout, measure=meas, result=0).save()
 			return HttpResponseRedirect(reverse('getfit.views.workout', args=[workout.id,]))
 
-	form = NewWorkoutForm({'exercise': 0, 'time_of_workout': str(timezone.now().strftime('%Y-%m-%d %H:%M'))})		
+	eastern=pytz.timezone('US/Eastern')
+
+	form = NewWorkoutForm({'exercise': 1, 'time_of_workout': str(timezone.now().astimezone(eastern).strftime('%Y-%m-%d %H:%M'))})		
 	return render(request, 'add.html', {'form': form})
