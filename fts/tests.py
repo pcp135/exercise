@@ -14,15 +14,6 @@ class ExerciseTest(LiveServerTestCase):
 		self.browser.quit()
 		pass
 		
-	def test_homepage_includes_workouts_setup_by_admin(self):
-		self.browser.get(self.live_server_url)
-
-		body = self.browser.find_element_by_tag_name('body')
-
-		self.assertIn('Workouts', body.text)
-		self.assertIn('Jumping', body.text)
-		self.assertIn('Reaching', body.text)
-		
 	def _setup_workouts_via_admin(self):
 		self.browser.get(self.live_server_url + '/admin/')
 				
@@ -92,65 +83,99 @@ class ExerciseTest(LiveServerTestCase):
 	
 		self.browser.find_element_by_link_text('Log out').click()
 		
-	def test_following_links_from_homepage_takes_me_to_workouts(self):
+	def test_homepage_includes_admin_setup_workouts_and_following_links_workouts(self):
+		
+		#Visit main page
 		self.browser.get(self.live_server_url)
 
+		body = self.browser.find_element_by_tag_name('body')
+
+		#Check all the admin setup stuff is shown
+		self.assertIn('Workouts', body.text)
+		self.assertIn('Jumping', body.text)
+		self.assertIn('Reaching', body.text)
+
+		#Visit the link for the first admin setup exercise
 		self.browser.find_element_by_link_text('Jumping').click()
 
 		body = self.browser.find_element_by_tag_name('body')
 
+		#and confirm details are correct
 		self.assertIn('Jumping', body.text)
 		self.assertIn('Length', body.text)
 		self.assertIn('12345', self.browser.page_source)
 
 		self.browser.get(self.live_server_url)
 
+		#now visit the second 
 		self.browser.find_element_by_link_text('Reaching').click()
 
 		body = self.browser.find_element_by_tag_name('body')
 
+		#and check everything is there
 		self.assertIn('Reaching', body.text)
 		self.assertIn('Width', body.text)
 		self.assertIn('67890', self.browser.page_source)
 
-	def test_navigating_directly_to_workout_works(self):
+		#now check we can navigate to a workout directly
 		self.browser.get(self.live_server_url + '/workout/1/')
 
 		body = self.browser.find_element_by_tag_name('body')
 
+		#and that all the details are still correct
 		self.assertIn('Jumping', body.text)
 		self.assertIn('Length', body.text)
 		self.assertIn('12345', self.browser.page_source)
 
-	def test_editing_a_workout_works(self):
-		self.browser.get(self.live_server_url + '/workout/1/')
-
+		#now check we can update the result for one of the measures
 		result_field = self.browser.find_element_by_name('Length')
 		result_field.clear()
 		result_field.send_keys('345678')
 		save_button = self.browser.find_element_by_xpath("//input[@type='submit']")
 		save_button.click()
 
+		#and that if we revisit the page the change stuck
 		self.browser.get(self.live_server_url + '/workout/1/')
 		body = self.browser.find_element_by_tag_name('body')
 		self.assertIn('Jumping', body.text)
 		self.assertIn('Length', body.text)
 		self.assertIn('345678', self.browser.page_source)
 	
-	def test_adding_a_new_workout(self):
+		#then go back to homepage
 		self.browser.get(self.live_server_url)
-		body = self.browser.find_element_by_tag_name('body')
-		self.assertIn('Jumping', body.text)
 
+		#and follow the add link to create a new workout
 		self.browser.find_element_by_link_text("Add a new workout").click()
-		self.browser.get(self.live_server_url + '/workout/add/')
-		print self.browser.page_source
-		self.browser.find_element_by_xpath("//select/option[@value='1']").click()
+
+		#choose the second type of exercise
+		self.browser.find_element_by_xpath("//select/option[@value='2']").click()
 		save_button = self.browser.find_element_by_xpath("//input[@type='submit']")
 		save_button.click()
 
+		#we should have been taken to the result editing page and be presented with appropriate choices
 		body = self.browser.find_element_by_tag_name('body')
+		self.assertIn('Reaching', body.text)
+		self.assertIn('Width', body.text)
+
+		#find the result field and set the result
+		result_field = self.browser.find_element_by_name('Width')
+		result_field.clear()
+		result_field.send_keys('234')
+		save_button = self.browser.find_element_by_xpath("//input[@type='submit']")
+		save_button.click()
+		
+		#check it looks like we are back on the homepage
+		body = self.browser.find_element_by_tag_name('body')
+		self.assertIn('Workouts', body.text)
 		self.assertIn('Jumping', body.text)
-		self.assertIn('Length', body.text)
+		self.assertIn('Reaching', body.text)
+		
+		#Now try to follow the link to our new workout
+		self.browser.find_elements_by_link_text("Reaching")[1].click()
+		
+		#and check the new result was logged
+		self.assertIn('234', self.browser.page_source)
+		
+		
 		
 		
