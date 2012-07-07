@@ -182,13 +182,23 @@ class ExerciseTest(LiveServerTestCase):
 		#give an invalid date
 		date_field = self.browser.find_element_by_name('time_of_workout')
 		date_field.send_keys('2010-565-23 15:15')
-		date_field.send_keys(Keys.RETURN)
+		save_button = self.browser.find_element_by_xpath("//input[@type='submit']")
+		save_button.click()
 		
 		#Check we were told off for entering an invalid choice
 		body = self.browser.find_element_by_tag_name('body')
 		self.assertIn('Enter a valid date/time', body.text)
 		
-
+		#Now go back to the first workout
+		self.browser.get(self.live_server_url + '/workout/1/')
+		
+		#And try to delete it
+		self.browser.find_element_by_link_text("Delete this workout").click()
+		
+		#Now try to reopen the workout
+		self.browser.get(self.live_server_url + '/workout/1/')
+		body = self.browser.find_element_by_tag_name('body')
+		print body.text
 		
 		
 		

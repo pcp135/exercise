@@ -234,3 +234,11 @@ class ViewTests(TestCase):
 		self.assertEquals(len(Workout.objects.all()), 2)
 		self.assertIn('Select a valid choice', response.content)
 		
+	def test_workout_view_has_delete_button(self):
+		response = self.client.get('/workout/%d/' % self.work1.id)
+		self.assertIn("Delete this workout", response.content)
+
+	def test_deleting_a_workout_removes_it(self):
+		response = self.client.get('/workout/%d/delete/' % self.work1.id)
+		self.assertEquals(len(Workout.objects.all()), 1)
+		self.assertRedirects(response, '/')

@@ -33,3 +33,8 @@ def add(request):
 		eastern=pytz.timezone('US/Eastern')
 		form = NewWorkoutForm({'exercise': 1, 'time_of_workout': str(timezone.now().astimezone(eastern).strftime('%Y-%m-%d %H:%M'))})		
 	return render(request, 'add.html', {'form': form})
+	
+def delete(request, workout_id):
+	workout = Workout.objects.get(pk = workout_id)
+	workout.delete()
+	return HttpResponseRedirect(reverse('getfit.views.home'))
