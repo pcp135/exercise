@@ -222,3 +222,15 @@ class ViewTests(TestCase):
 		self.assertNotIn("Reps:", response.content)
 		self.assertIn("Time:", response.content)
 		
+	def test_add_view_cant_create_workout_with_invalid_date(self):
+		post_data = {'exercise': str(self.exer1.id), 'time_of_workout': "2010-565-01 15:15"}
+		response = self.client.post('/workout/add/', data=post_data)
+		self.assertEquals(len(Workout.objects.all()), 2)
+		self.assertIn('Enter a valid date/time', response.content)
+
+	def test_add_view_cant_create_workout_with_invalid_exercise(self):
+		post_data = {'exercise': "700", 'time_of_workout': "2010-5-01 15:15"}
+		response = self.client.post('/workout/add/', data=post_data)
+		self.assertEquals(len(Workout.objects.all()), 2)
+		self.assertIn('Select a valid choice', response.content)
+		

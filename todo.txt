@@ -1,3 +1,4 @@
+handle invalid date
 allow a workout to be deleted
 allow the date/time of workout to be updated
 add outline template with home/add links etc

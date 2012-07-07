@@ -176,6 +176,19 @@ class ExerciseTest(LiveServerTestCase):
 		#and check the new result was logged
 		self.assertIn('234', self.browser.page_source)
 		
+		#now try to add a new workout directly
+		self.browser.get(self.live_server_url + '/workout/add/')
+
+		#give an invalid date
+		date_field = self.browser.find_element_by_name('time_of_workout')
+		date_field.send_keys('2010-565-23 15:15')
+		date_field.send_keys(Keys.RETURN)
+		
+		#Check we were told off for entering an invalid choice
+		body = self.browser.find_element_by_tag_name('body')
+		self.assertIn('Enter a valid date/time', body.text)
+		
+
 		
 		
 		
