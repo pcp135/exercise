@@ -10,16 +10,22 @@ def home(request):
 	return render(request, 'home.html', {'workouts': Workout.objects.all()})
 	
 def workout(request, workout_id):
-	workout = Workout.objects.get(pk = workout_id)
-	if request.method == 'POST':
-		for score in workout.score_set.all():
-			score.result=request.POST[score.measure.name]
-			score.save()
-		return HttpResponseRedirect(reverse('getfit.views.home'))
+	try:
+		workout = Workout.objects.get(pk = workout_id)
+	except:
+		workout = None
+	if workout:
+		if request.method == 'POST':
+			for score in workout.score_set.all():
+				score.result=request.POST[score.measure.name]
+				score.save()
+			return HttpResponseRedirect(reverse('getfit.views.home'))
 	
-	form = WorkoutScoreForm(workout)
-	context = {'workout': workout, 'form': form}
-	return render(request, 'workout.html', context)	
+		form = WorkoutScoreForm(workout)
+		context = {'workout': workout, 'form': form}
+		return render(request, 'workout.html', context)	
+	else:
+		return render(request, 'invalidworkout.html')
 	
 def add(request):
 	if request.method == 'POST':

@@ -242,3 +242,8 @@ class ViewTests(TestCase):
 		response = self.client.get('/workout/%d/delete/' % self.work1.id)
 		self.assertEquals(len(Workout.objects.all()), 1)
 		self.assertRedirects(response, '/')
+		
+	def test_trying_to_open_an_invalid_workout_tells_you_it_doesnt_exist(self):
+		response = self.client.get('/workout/200/')
+		self.assertIn("That workout doesn't exist", response.content)
+		

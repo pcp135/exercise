@@ -198,7 +198,6 @@ class ExerciseTest(LiveServerTestCase):
 		#Now try to reopen the workout
 		self.browser.get(self.live_server_url + '/workout/1/')
 		body = self.browser.find_element_by_tag_name('body')
-		print body.text
-		
+		self.assertIn("That workout doesn't exist", body.text)
 		
 		
