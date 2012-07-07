@@ -200,4 +200,8 @@ class ExerciseTest(LiveServerTestCase):
 		body = self.browser.find_element_by_tag_name('body')
 		self.assertIn("That workout doesn't exist", body.text)
 		
+		#Now try to directly delete a non-existent workout
+		self.browser.get(self.live_server_url + '/workout/1/delete')
+		body = self.browser.find_element_by_tag_name('body')
+		self.assertIn("That workout doesn't exist", body.text)
 		

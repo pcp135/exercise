@@ -1,4 +1,3 @@
-need to give error message if trying to open non-existent workout
 allow the date/time of workout to be updated
 add outline template with home/add links etc
 add some kind of pagination

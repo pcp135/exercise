@@ -41,6 +41,12 @@ def add(request):
 	return render(request, 'add.html', {'form': form})
 	
 def delete(request, workout_id):
-	workout = Workout.objects.get(pk = workout_id)
-	workout.delete()
-	return HttpResponseRedirect(reverse('getfit.views.home'))
+	try:
+		workout = Workout.objects.get(pk = workout_id)
+	except:
+		workout = None
+	if workout:
+		workout.delete()
+		return HttpResponseRedirect(reverse('getfit.views.home'))
+	else:
+		return render(request, 'invalidworkout.html')

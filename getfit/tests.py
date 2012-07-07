@@ -246,4 +246,8 @@ class ViewTests(TestCase):
 	def test_trying_to_open_an_invalid_workout_tells_you_it_doesnt_exist(self):
 		response = self.client.get('/workout/200/')
 		self.assertIn("That workout doesn't exist", response.content)
+
+	def test_trying_to_delete_an_invalid_workout_tells_you_it_doesnt_exist(self):
+		response = self.client.get('/workout/200/delete/')
+		self.assertIn("That workout doesn't exist", response.content)
 		
