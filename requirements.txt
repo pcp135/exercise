@@ -1,5 +1,6 @@
 Django==1.4
 dj-database-url==0.2.1
+django-bootstrap-form==2.0.3
 docutils==0.9.1
 mock==0.8.0
 psycopg2==2.4.5

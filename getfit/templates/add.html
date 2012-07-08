@@ -2,9 +2,20 @@
 {% block title %}{{ type }} Workout{% endblock %}
 {% block header %}{{ type }} Workout{% endblock %}
 {% block content %}
-	<form method="POST" action="">
-		{% csrf_token %}
-		{{ form.as_p }}
-		<input type = "submit">
+	{% load bootstrap %}	
+	<form class = "form-horizontal" method="POST" action="">
+		<fieldset>
+			{% csrf_token %}
+			<div class="control-group{% if form.exercise.errors %} error{% endif %}">
+				{{ form.exercise|bootstrap }}
+			</div>
+			<div class="control-group{% if form.time_of_workout.errors %} error{% endif %}">
+				{{ form.time_of_workout|bootstrap }}
+			</div>
+			<div class="form-actions">
+				<button type="submit" class="btn btn-primary">
+					{{ action }} workout
+				</button>
+		</fieldset>
 	</form>
 {% endblock %}

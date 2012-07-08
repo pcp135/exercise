@@ -129,6 +129,7 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
 		'fts',
 		'getfit',
+		'bootstrapform',
 )
 
 # A sample logging configuration. The only tangible logging

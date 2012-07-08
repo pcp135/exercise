@@ -149,7 +149,7 @@ class ExerciseTest(LiveServerTestCase):
 
 		#choose the second type of exercise
 		self.browser.find_element_by_xpath("//select/option[@value='2']").click()
-		save_button = self.browser.find_element_by_xpath("//input[@type='submit']")
+		save_button = self.browser.find_element_by_xpath("//button[@type='submit']")
 		save_button.click()
 
 		#we should have been taken to the result editing page and be presented with appropriate choices
@@ -183,7 +183,7 @@ class ExerciseTest(LiveServerTestCase):
 		date_field = self.browser.find_element_by_name('time_of_workout')
 		date_field.clear()
 		date_field.send_keys('2010-565-23 15:15')
-		save_button = self.browser.find_element_by_xpath("//input[@type='submit']")
+		save_button = self.browser.find_element_by_xpath("//button[@type='submit']")
 		save_button.click()
 		
 		#Check we were told off for entering an invalid choice
@@ -213,7 +213,7 @@ class ExerciseTest(LiveServerTestCase):
 		date_field = self.browser.find_element_by_name('time_of_workout')
 		date_field.clear()
 		date_field.send_keys('2010-06-24 15:15')
-		save_button = self.browser.find_element_by_xpath("//input[@type='submit']")
+		save_button = self.browser.find_element_by_xpath("//button[@type='submit']")
 		save_button.click()
 		
 		#Now try to reopen the workout and check the date changed
@@ -231,7 +231,7 @@ class ExerciseTest(LiveServerTestCase):
 		date_field = self.browser.find_element_by_name('time_of_workout')
 		date_field.clear()
 		date_field.send_keys('2010-06-23 15:15')
-		save_button = self.browser.find_element_by_xpath("//input[@type='submit']")
+		save_button = self.browser.find_element_by_xpath("//button[@type='submit']")
 		save_button.click()
 		
 		#Now try to reopen the workout and check the date changed
