@@ -1,10 +1,10 @@
-<html>
-	<body>
-		<h1>{{ type }} Workout</h1>
-		<form method="POST" action="">
-			{% csrf_token %}
-			{{ form.as_p }}
-			<input type = "submit">
-		</form>
-	</body>
-</html>
+{% extends "base.html" %}
+{% block title %}{{ type }} Workout{% endblock %}
+{% block header %}{{ type }} Workout{% endblock %}
+{% block content %}
+	<form method="POST" action="">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<input type = "submit">
+	</form>
+{% endblock %}
