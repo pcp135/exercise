@@ -8,6 +8,7 @@ import pytz
 
 class ModelTests(TestCase):
 	def setUp(self):
+		self.eastern=pytz.timezone('US/Eastern')
 		self.meas = Measure()
 		self.meas.name = "Reps"
 		self.meas.save()
@@ -104,6 +105,7 @@ class ModelTests(TestCase):
 		
 class ViewTests(TestCase):
 	def setUp(self):
+		self.eastern=pytz.timezone('US/Eastern')
 		self.exer1 = Exercise(name = 'Testing')
 		self.exer1.save()
 		
@@ -138,11 +140,10 @@ class ViewTests(TestCase):
 		
 	def test_home_page_displays_exercises_and_dates(self):
 		response = self.client.get('/')
-		eastern=pytz.timezone('US/Eastern')
 		self.assertIn(self.work1.exercise.name, response.content)
 		self.assertIn(self.work2.exercise.name, response.content)
-		self.assertIn(self.work1.time_of_workout.astimezone(eastern).strftime("%A %d %B %Y"), response.content)
-		self.assertIn(self.work2.time_of_workout.astimezone(eastern).strftime("%A %d %B %Y"), response.content)
+		self.assertIn(self.work1.time_of_workout.astimezone(self.eastern).strftime("%A %d %B %Y"), response.content)
+		self.assertIn(self.work2.time_of_workout.astimezone(self.eastern).strftime("%A %d %B %Y"), response.content)
 		
 	def test_workout_page_exists_and_uses_correct_template(self):
 		response = self.client.get('/workout/%d/' % self.work2.id)
@@ -158,10 +159,9 @@ class ViewTests(TestCase):
 		
 	def test_workout_page_lists_exercise_and_date_and_time_of_workout(self):
 		response = self.client.get('/workout/%d/' % self.work2.id)
-		eastern=pytz.timezone('US/Eastern')
 		self.assertIn(self.work2.exercise.name, response.content)
-		self.assertIn(self.work2.time_of_workout.astimezone(eastern).strftime("%A %d %B %Y"), response.content)
-		self.assertIn(self.work2.time_of_workout.astimezone(eastern).strftime("%H:%M"), response.content)
+		self.assertIn(self.work2.time_of_workout.astimezone(self.eastern).strftime("%A %d %B %Y"), response.content)
+		self.assertIn(self.work2.time_of_workout.astimezone(self.eastern).strftime("%H:%M"), response.content)
 		
 	def test_workout_lists_each_score(self):
 		response = self.client.get('/workout/%d/' % self.work1.id)
@@ -229,7 +229,7 @@ class ViewTests(TestCase):
 		self.assertIn('Enter a valid date/time', response.content)
 
 	def test_add_view_cant_create_workout_with_invalid_exercise(self):
-		post_data = {'exercise': "700", 'time_of_workout': "2010-5-01 15:15"}
+		post_data = {'exercise': "700", 'time_of_workout': "2010-05-01 15:15"}
 		response = self.client.post('/workout/add/', data=post_data)
 		self.assertEquals(len(Workout.objects.all()), 2)
 		self.assertIn('Select a valid choice', response.content)
@@ -250,4 +250,16 @@ class ViewTests(TestCase):
 	def test_trying_to_delete_an_invalid_workout_tells_you_it_doesnt_exist(self):
 		response = self.client.get('/workout/200/delete/')
 		self.assertIn("That workout doesn't exist", response.content)
+		
+	def test_workout_view_has_edit_button(self):
+		response = self.client.get('/workout/%d/' % self.work1.id)
+		self.assertIn("Edit this workout", response.content)
+
+	def test_editing_a_workout_date_updates_it(self):
+		post_data = {'exercise': str(self.exer1.id), 'time_of_workout': "2010-06-01 15:15"}
+		response = self.client.post('/workout/%d/edit/' % self.work1.id, data=post_data)
+		self.assertEquals(len(Workout.objects.all()), 2)
+		self.assertRedirects(response, '/workout/%d/' % self.work1.id)
+		chgdWorkout = Workout.objects.get(pk = self.work1.id)
+		self.assertEquals("Tuesday 01 June 2010", chgdWorkout.time_of_workout.astimezone(self.eastern).strftime("%A %d %B %Y"))
 		

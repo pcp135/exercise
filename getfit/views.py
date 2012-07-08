@@ -38,7 +38,7 @@ def add(request):
 	else:
 		eastern=pytz.timezone('US/Eastern')
 		form = NewWorkoutForm({'exercise': 1, 'time_of_workout': str(timezone.now().astimezone(eastern).strftime('%Y-%m-%d %H:%M'))})		
-	return render(request, 'add.html', {'form': form})
+	return render(request, 'add.html', {'form': form, 'type': "New"})
 	
 def delete(request, workout_id):
 	try:
@@ -48,5 +48,25 @@ def delete(request, workout_id):
 	if workout:
 		workout.delete()
 		return HttpResponseRedirect(reverse('getfit.views.home'))
+	else:
+		return render(request, 'invalidworkout.html')
+		
+def edit(request, workout_id):
+	try:
+		workout = Workout.objects.get(pk = workout_id)
+	except:
+		workout = None
+	if workout:
+		if request.method == 'POST':
+			form = NewWorkoutForm(request.POST)
+			if form.is_valid():
+				workout.exercise = form.cleaned_data['exercise']
+				workout.time_of_workout = form.cleaned_data['time_of_workout']
+				workout.save()
+				return HttpResponseRedirect(reverse('getfit.views.workout', args=[workout.id,]))
+		else:
+			eastern=pytz.timezone('US/Eastern')
+			form = NewWorkoutForm({'exercise': workout.id, 'time_of_workout': workout.time_of_workout.astimezone(eastern).strftime('%Y-%m-%d %H:%M')})
+			return render(request, 'add.html', {'form': form, 'type': "Edit"})
 	else:
 		return render(request, 'invalidworkout.html')

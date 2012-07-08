@@ -1,6 +1,6 @@
 <html>
 	<body>
-		<h1>New Workout</h1>
+		<h1>{{ type }} Workout</h1>
 		<form method="POST" action="">
 			{% csrf_token %}
 			{{ form.as_p }}

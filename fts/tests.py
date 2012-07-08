@@ -204,4 +204,36 @@ class ExerciseTest(LiveServerTestCase):
 		self.browser.get(self.live_server_url + '/workout/1/delete')
 		body = self.browser.find_element_by_tag_name('body')
 		self.assertIn("That workout doesn't exist", body.text)
+
+		#Now go to the second workouts edit view
+		self.browser.get(self.live_server_url + '/workout/2/edit/')
+		
+		#And try to edit it
+		date_field = self.browser.find_element_by_name('time_of_workout')
+		date_field.clear()
+		date_field.send_keys('2010-06-24 15:15')
+		save_button = self.browser.find_element_by_xpath("//input[@type='submit']")
+		save_button.click()
+		
+		#Now try to reopen the workout and check the date changed
+		self.browser.get(self.live_server_url + '/workout/2/')
+		body = self.browser.find_element_by_tag_name('body')
+		self.assertIn("Thursday 24 June 2010 @ 15:15", body.text)
+		
+		#Now go to the second workout 
+		self.browser.get(self.live_server_url + '/workout/2/')
+		
+		#And try to edit it
+		self.browser.find_element_by_link_text("Edit this workout").click()
+		date_field = self.browser.find_element_by_name('time_of_workout')
+		date_field.clear()
+		date_field.send_keys('2010-06-23 15:15')
+		save_button = self.browser.find_element_by_xpath("//input[@type='submit']")
+		save_button.click()
+		
+		#Now try to reopen the workout and check the date changed
+		self.browser.get(self.live_server_url + '/workout/2/')
+		body = self.browser.find_element_by_tag_name('body')
+		self.assertIn("Wednesday 23 June 2010 @ 15:15", body.text)
+		
 		
