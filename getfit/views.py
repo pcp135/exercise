@@ -7,7 +7,7 @@ from django.utils import timezone
 import pytz
 
 def home(request):
-	return render(request, 'home.html', {'workouts': Workout.objects.all()})
+	return render(request, 'home.html', {'workouts': Workout.objects.all().order_by('-time_of_workout')})
 	
 def workout(request, workout_id):
 	try:
