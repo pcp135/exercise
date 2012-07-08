@@ -181,6 +181,7 @@ class ExerciseTest(LiveServerTestCase):
 
 		#give an invalid date
 		date_field = self.browser.find_element_by_name('time_of_workout')
+		date_field.clear()
 		date_field.send_keys('2010-565-23 15:15')
 		save_button = self.browser.find_element_by_xpath("//input[@type='submit']")
 		save_button.click()
@@ -219,12 +220,14 @@ class ExerciseTest(LiveServerTestCase):
 		self.browser.get(self.live_server_url + '/workout/2/')
 		body = self.browser.find_element_by_tag_name('body')
 		self.assertIn("Thursday 24 June 2010 @ 15:15", body.text)
+		self.assertIn("Reaching", body.text)
 		
 		#Now go to the second workout 
 		self.browser.get(self.live_server_url + '/workout/2/')
 		
 		#And try to edit it
 		self.browser.find_element_by_link_text("Edit this workout").click()
+		self.browser.find_element_by_xpath("//select/option[@value='1']").click()
 		date_field = self.browser.find_element_by_name('time_of_workout')
 		date_field.clear()
 		date_field.send_keys('2010-06-23 15:15')
@@ -235,5 +238,6 @@ class ExerciseTest(LiveServerTestCase):
 		self.browser.get(self.live_server_url + '/workout/2/')
 		body = self.browser.find_element_by_tag_name('body')
 		self.assertIn("Wednesday 23 June 2010 @ 15:15", body.text)
+		self.assertIn("Jumping", body.text)
 		
 		

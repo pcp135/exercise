@@ -262,4 +262,13 @@ class ViewTests(TestCase):
 		self.assertRedirects(response, '/workout/%d/' % self.work1.id)
 		chgdWorkout = Workout.objects.get(pk = self.work1.id)
 		self.assertEquals("Tuesday 01 June 2010", chgdWorkout.time_of_workout.astimezone(self.eastern).strftime("%A %d %B %Y"))
+
+	def test_editing_a_workout_exercise_updates_it(self):
+		self.assertEquals(self.work1.exercise, self.exer1)
+		post_data = {'exercise': str(self.exer2.id), 'time_of_workout': str(self.work1.time_of_workout.astimezone(self.eastern).strftime('%Y-%m-%d %H:%M'))}
+		response = self.client.post('/workout/%d/edit/' % self.work1.id, data=post_data)
+		self.assertEquals(len(Workout.objects.all()), 2)
+		self.assertRedirects(response, '/workout/%d/' % self.work1.id)
+		chgdWorkout = Workout.objects.get(pk = self.work1.id)
+		self.assertEquals(chgdWorkout.exercise, self.exer2)
 		
