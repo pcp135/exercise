@@ -1,11 +1,11 @@
-<html>
-	<body>
-		<h1>Workouts</h1>
-		<ul>
-		{% for workout in workouts %}
-			<li><a href= "{% url getfit.views.workout workout.id %}">{{ workout.exercise }}</a> on {{ workout.time_of_workout|date:"l d F Y" }}</li>
-		{% endfor %}
-		</ul>
-		<a href = "{% url getfit.views.add %}">Add a new workout</a>
-	</body>
-</html>
+{% extends "base.html" %}
+{% block title %}Workouts{% endblock %}
+{% block header %}Workouts{% endblock %}
+{% block content %}
+	<ul>
+	{% for workout in workouts %}
+		<li><a href= "{% url getfit.views.workout workout.id %}">{{ workout.exercise }}</a> on {{ workout.time_of_workout|date:"l d F Y" }}</li>
+	{% endfor %}
+	</ul>
+	<a href = "{% url getfit.views.add %}">Add a new workout</a>
+{% endblock %}
