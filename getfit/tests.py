@@ -130,6 +130,8 @@ class ViewTests(TestCase):
 
 		self.score1=Score(workout=self.work1, measure=self.meas1, result=2201)
 		self.score1.save()
+		self.score1a=Score(workout=self.work1, measure=self.meas2, result=2202)
+		self.score1a.save()
 		self.score2=Score(workout=self.work1, measure=self.meas2, result=3220)
 		self.score2.save()
 
@@ -282,3 +284,7 @@ class ViewTests(TestCase):
 		response = self.client.get(reverse('getfit.views.add'))
 		self.assertIn(reverse('getfit.views.add'), response.content)
 
+	def test_entering_invalid_results_gives_error_message(self):
+		post_data = {self.meas1.name: "dd700", self.meas2.name: "204"}
+		response = self.client.post(reverse('getfit.views.workout', args=[self.work1.id,]), data=post_data)
+		self.assertIn('Enter a number', response.content)

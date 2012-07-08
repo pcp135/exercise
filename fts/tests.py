@@ -192,6 +192,20 @@ class ExerciseTest(LiveServerTestCase):
 		
 		#Now go back to the first workout
 		self.browser.get(self.live_server_url + '/workout/1/')
+
+		#And try to alter the score to an invalid one
+		result_field = self.browser.find_element_by_name('Length')
+		result_field.clear()
+		result_field.send_keys('34ss5678')
+		save_button = self.browser.find_element_by_xpath("//button[@type='submit']")
+		save_button.click()
+
+		#Check we were told off for entering an invalid choice
+		body = self.browser.find_element_by_tag_name('body')
+		self.assertIn('Enter a number', body.text)
+
+		#Now go back to the first workout
+		self.browser.get(self.live_server_url + '/workout/1/')
 		
 		#And try to delete it
 		self.browser.find_element_by_link_text("Delete this workout").click()

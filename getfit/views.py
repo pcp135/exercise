@@ -16,12 +16,14 @@ def workout(request, workout_id):
 		workout = None
 	if workout:
 		if request.method == 'POST':
-			for score in workout.score_set.all():
-				score.result=request.POST[score.measure.name]
-				score.save()
-			return HttpResponseRedirect(reverse('getfit.views.home'))
-	
-		form = WorkoutScoreForm(workout)
+			form = WorkoutScoreForm(workout, request.POST)
+			if form.is_valid():
+				for score in workout.score_set.all():
+					score.result=request.POST[score.measure.name]
+					score.save()
+				return HttpResponseRedirect(reverse('getfit.views.home'))
+		else:
+			form = WorkoutScoreForm(workout)
 		context = {'workout': workout, 'form': form}
 		return render(request, 'workout.html', context)	
 	else:
