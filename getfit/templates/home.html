@@ -6,11 +6,11 @@
 	    <tbody>
 			{% for workout in workouts %}
 				<tr>
-					<td class="span1">
+					<td class="span2">
 						<a href= "{% url getfit.views.workout workout.id %}">
 							{{ workout.exercise }}</a> 
 					</td>
-					<td class="span1">
+					<td class="span3">
 						{{ workout.time_of_workout|date:"l d F Y" }}
 					</td>
 				</tr>
