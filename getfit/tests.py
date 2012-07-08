@@ -272,5 +272,13 @@ class ViewTests(TestCase):
 	
 	def test_home_page_has_a_link_back_to_itself(self):
 		response = self.client.get(reverse('getfit.views.home'))
-		self.assertIn('href "' + reverse('getfit.views.home'), response.content)
+		self.assertIn('href= "' + reverse('getfit.views.home') + '"', response.content)
+
+	def test_add_page_has_a_link_to_homepage(self):
+		response = self.client.get(reverse('getfit.views.add'))
+		self.assertIn('href= "' + reverse('getfit.views.home')  + '"', response.content)
+
+	def test_add_page_has_a_link_to_homepage(self):
+		response = self.client.get(reverse('getfit.views.add'))
+		self.assertIn(reverse('getfit.views.add'), response.content)
 

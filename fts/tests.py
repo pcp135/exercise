@@ -142,10 +142,10 @@ class ExerciseTest(LiveServerTestCase):
 		self.assertIn('345678', self.browser.page_source)
 	
 		#then go back to homepage
-		self.browser.get(self.live_server_url)
+		self.browser.find_element_by_link_text("Home").click()
 
 		#and follow the add link to create a new workout
-		self.browser.find_element_by_link_text("Add a new workout").click()
+		self.browser.find_element_by_link_text("Add").click()
 
 		#choose the second type of exercise
 		self.browser.find_element_by_xpath("//select/option[@value='2']").click()

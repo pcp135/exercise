@@ -7,5 +7,4 @@
 		<li><a href= "{% url getfit.views.workout workout.id %}">{{ workout.exercise }}</a> on {{ workout.time_of_workout|date:"l d F Y" }}</li>
 	{% endfor %}
 	</ul>
-	<a href = "{% url getfit.views.add %}">Add a new workout</a>
 {% endblock %}
