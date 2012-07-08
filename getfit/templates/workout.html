@@ -1,14 +1,14 @@
+{% extends "base.html" %}
+{% block title %}{{ workout.exercise.name }}{% endblock %}
+{% block header %}{{ workout.exercise.name }}{% endblock %}
+{% block content %}
 {% load tz %}
-<html>
-	<body>
-		<h1>{{ workout.exercise.name }}</h1>
-		<h2>{{ workout.time_of_workout|localtime|date:"l d F Y @ H:i" }}</h2>
-		<form method="POST" action="">
-			{% csrf_token %}
-			{{ form.as_p }}
-			<input type = "submit">
-		</form>
-		<a href= "{% url getfit.views.edit workout.id %}">Edit this workout</a>
-		<a href= "{% url getfit.views.delete workout.id %}">Delete this workout</a>
-	</body>
-</html>
+	<h2>{{ workout.time_of_workout|localtime|date:"l d F Y @ H:i" }}</h2>
+	<form method="POST" action="">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<input type = "submit">
+	</form>
+	<a href= "{% url getfit.views.edit workout.id %}">Edit this workout</a>
+	<a href= "{% url getfit.views.delete workout.id %}">Delete this workout</a>
+{% endblock %}
