@@ -3,11 +3,21 @@
 {% block header %}{{ workout.exercise.name }}{% endblock %}
 {% block content %}
 {% load tz %}
-	<h2>{{ workout.time_of_workout|localtime|date:"l d F Y @ H:i" }}</h2>
-	<form method="POST" action="">
-		{% csrf_token %}
-		{{ form.as_p }}
-		<input type = "submit">
+	<h2>{{ workout.time_of_workout|localtime|date:"l d F Y @ H:i" }}<br></h2>
+	{% load bootstrap %}	
+	<form class = "form-horizontal" method="POST" action="">
+		<fieldset>
+			{% csrf_token %}
+			{% for field in form %}
+				<div class="control-group">
+					{{ field|bootstrap }}
+				</div>
+			{% endfor %}
+			<div class="form-actions">
+				<button type="submit" class="btn btn-primary">
+					Update workout
+				</button>
+		</fieldset>
 	</form>
 	<a href= "{% url getfit.views.edit workout.id %}">Edit this workout</a>
 	<a href= "{% url getfit.views.delete workout.id %}">Delete this workout</a>

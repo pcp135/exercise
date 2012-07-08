@@ -213,12 +213,12 @@ class ViewTests(TestCase):
 		self.assertEquals(len(Workout.objects.all()), 4)
 
 		response = self.client.get(reverse('getfit.views.workout', args=[3,]))		
-		self.assertIn("Reps:", response.content)
-		self.assertIn("Time:", response.content)
+		self.assertIn("Reps", response.content)
+		self.assertIn("Time", response.content)
 		
 		response = self.client.get(reverse('getfit.views.workout', args=[4,]))		
-		self.assertNotIn("Reps:", response.content)
-		self.assertIn("Time:", response.content)
+		self.assertNotIn("Reps", response.content)
+		self.assertIn("Time", response.content)
 		
 	def test_add_view_cant_create_workout_with_invalid_date(self):
 		post_data = {'exercise': str(self.exer1.id), 'time_of_workout': "2010-565-01 15:15"}

@@ -131,7 +131,7 @@ class ExerciseTest(LiveServerTestCase):
 		result_field = self.browser.find_element_by_name('Length')
 		result_field.clear()
 		result_field.send_keys('345678')
-		save_button = self.browser.find_element_by_xpath("//input[@type='submit']")
+		save_button = self.browser.find_element_by_xpath("//button[@type='submit']")
 		save_button.click()
 
 		#and that if we revisit the page the change stuck
@@ -161,7 +161,7 @@ class ExerciseTest(LiveServerTestCase):
 		result_field = self.browser.find_element_by_name('Width')
 		result_field.clear()
 		result_field.send_keys('234')
-		save_button = self.browser.find_element_by_xpath("//input[@type='submit']")
+		save_button = self.browser.find_element_by_xpath("//button[@type='submit']")
 		save_button.click()
 		
 		#check it looks like we are back on the homepage

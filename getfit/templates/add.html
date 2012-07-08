@@ -6,10 +6,10 @@
 	<form class = "form-horizontal" method="POST" action="">
 		<fieldset>
 			{% csrf_token %}
-			<div class="control-group{% if form.exercise.errors %} error{% endif %}">
+			<div class="control-group">
 				{{ form.exercise|bootstrap }}
 			</div>
-			<div class="control-group{% if form.time_of_workout.errors %} error{% endif %}">
+			<div class="control-group">
 				{{ form.time_of_workout|bootstrap }}
 			</div>
 			<div class="form-actions">
