@@ -1,6 +1,7 @@
 from django import forms
 from django.utils import timezone
 from getfit.models import Workout
+from django.contrib.admin import widgets                                       
 
 class WorkoutScoreForm(forms.Form):
 	
@@ -13,5 +14,7 @@ class WorkoutScoreForm(forms.Form):
 				self.fields[score.measure.name] = forms.DecimalField()
 
 class NewWorkoutForm(forms.ModelForm):
+	time_of_workout = forms.SplitDateTimeField(widget=widgets.AdminSplitDateTime)
+	
 	class Meta:
 		model = Workout

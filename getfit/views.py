@@ -38,8 +38,7 @@ def add(request):
 				Score(workout=workout, measure=meas, result=0).save()
 			return HttpResponseRedirect(reverse('getfit.views.workout', args=[workout.id,]))
 	else:
-		eastern=pytz.timezone('US/Eastern')
-		form = NewWorkoutForm({'exercise': 1, 'time_of_workout': str(timezone.now().astimezone(eastern).strftime('%Y-%m-%d %H:%M'))})		
+		form = NewWorkoutForm()		
 	return render(request, 'add.html', {'form': form, 'type': "New", 'action': "Add"})
 	
 def delete(request, workout_id):

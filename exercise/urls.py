@@ -11,6 +11,7 @@ urlpatterns = patterns('',
     url(r'^workout/add/$', 'getfit.views.add'),
     url(r'^workout/(\d+)/delete/$', 'getfit.views.delete'),
     url(r'^workout/(\d+)/edit/$', 'getfit.views.edit'),
+		url(r'^my_admin/jsi18n', 'django.views.i18n.javascript_catalog'),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
