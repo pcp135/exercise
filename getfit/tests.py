@@ -352,11 +352,11 @@ class ViewTests(TestCase):
 
 	def test_add_exercise_view_has_add_button(self):
 		response = self.client.get(reverse('getfit.views.addexercise'))
-		self.assertIn("Add measure", response.content)
+		self.assertIn("Add exercise", response.content)
 
 	def test_add_exercise_view_can_create_a_new_exercise(self):
-		post_data = {'name': 'Leaping'}
-		response = self.client.post(reverse('getfit.views.exercise'), data=post_data)
+		post_data = {'name': 'Leaping', 'measure': '1'}
+		response = self.client.post(reverse('getfit.views.addexercise'), data=post_data)
 		self.assertEquals(len(Exercise.objects.all()), 3)
-		self.assertRedirects(response, reverse('getfit.views.exercise'))
-		self.assertEquals(Measure.objects.get(pk=3).name, 'Leaping')
+		self.assertRedirects(response, reverse('getfit.views.exercises'))
+		self.assertEquals(Exercise.objects.get(pk=3).name, 'Leaping')

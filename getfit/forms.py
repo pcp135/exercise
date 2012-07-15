@@ -1,6 +1,6 @@
 from django import forms
 from django.utils import timezone
-from getfit.models import Workout, Measure
+from getfit.models import Workout, Measure, Exercise
 from django.contrib.admin import widgets                                       
 
 class WorkoutScoreForm(forms.Form):
@@ -22,3 +22,15 @@ class NewWorkoutForm(forms.ModelForm):
 class NewMeasureForm(forms.ModelForm):
 	class Meta:
 		model = Measure
+
+class NewExerciseForm(forms.ModelForm):
+	def __init__(self, *args, **kwargs):
+	        super(NewExerciseForm, self).__init__(*args, **kwargs)
+	        self.fields['measure'].help_text = ""
+	
+	class Meta:
+		model = Exercise
+		widgets = {'measure': forms.CheckboxSelectMultiple}
+		help_text = {'measure': ""}
+	
+		

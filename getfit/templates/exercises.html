@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Exercises{% endblock %}
+{% block header %}Exercises{% endblock %}
+{% block content %}
+	<div class="form-actions">
+		<a class="btn btn-primary" href= "{% url getfit.views.addexercise %}">
+			Add exercise</a>
+	</div>
+	<table class="table table-bordered table-striped span6">
+	    <tbody>
+			{% for exercise in exercises %}
+				<tr>
+					<td class="span2">{{ exercise.name }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>				
+{% endblock %}

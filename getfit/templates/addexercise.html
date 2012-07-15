@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Add Exercise{% endblock %}
+{% block header %}Add Exercise{% endblock %}
+{% block content %}
+	{% load bootstrap %}	
+	<form class = "form-horizontal" method="POST" action="">
+		<fieldset>
+			{% csrf_token %}
+			{{ form|bootstrap }}
+			<div class="form-actions">
+				<button type="submit" class="btn btn-primary">
+					Add exercise
+				</button>
+			</div>
+		</fieldset>
+	</form>
+{% endblock %}

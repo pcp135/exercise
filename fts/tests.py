@@ -313,7 +313,8 @@ class ExerciseTest(LiveServerTestCase):
 		#Try to add a new exercise
 		exercise_field = self.browser.find_element_by_name('name')
 		exercise_field.send_keys('Stretching')
-		self.assertFail("Need to fill in code to select measures")
+		self.browser.find_element_by_xpath("//input[@value='2']").click()
+		self.browser.find_element_by_xpath("//input[@value='3']").click()
 		save_button = self.browser.find_element_by_xpath("//button[@type='submit']")
 		save_button.click()
 		
@@ -322,4 +323,28 @@ class ExerciseTest(LiveServerTestCase):
 		body = self.browser.find_element_by_tag_name('body')
 		self.assertIn('Stretching', body.text)
 		
+		#Now let's add a new workout with our new exercise and measure
+		self.browser.find_element_by_link_text("Add").click()
+		self.browser.find_element_by_xpath("//select/option[@value='3']").click()
+		self.browser.find_element_by_link_text("Today").click()
+		self.browser.find_element_by_link_text("Now").click()
+		save_button = self.browser.find_element_by_xpath("//button[@type='submit']")
+		save_button.click()
+
+		#we should have been taken to the result editing page and be presented with appropriate choices
+		body = self.browser.find_element_by_tag_name('body')
+		self.assertIn('Stretching', body.text)
+		self.assertIn('Breadth', body.text)
+		self.assertIn('Width', body.text)
+		self.assertNotIn('Length', body.text)
+
+		#find the result field and set the result
+		result_field = self.browser.find_element_by_name('Width')
+		result_field.clear()
+		result_field.send_keys('234')
+		result_field = self.browser.find_element_by_name('Breadth')
+		result_field.clear()
+		result_field.send_keys('345')
+		save_button = self.browser.find_element_by_xpath("//button[@type='submit']")
+		save_button.click()
 		
