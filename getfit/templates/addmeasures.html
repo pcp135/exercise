@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Add Measure{% endblock %}
+{% block header %}Add Measure{% endblock %}
+{% block content %}
+	{% load bootstrap %}	
+	<form class = "form-horizontal" method="POST" action="">
+		<fieldset>
+			{% csrf_token %}
+			{{ form|bootstrap }}
+			<div class="form-actions">
+				<button type="submit" class="btn btn-primary">
+					Add measure
+				</button>
+			</div>
+		</fieldset>
+	</form>
+{% endblock %}

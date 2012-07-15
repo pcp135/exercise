@@ -1,6 +1,6 @@
 from django import forms
 from django.utils import timezone
-from getfit.models import Workout
+from getfit.models import Workout, Measure
 from django.contrib.admin import widgets                                       
 
 class WorkoutScoreForm(forms.Form):
@@ -18,3 +18,7 @@ class NewWorkoutForm(forms.ModelForm):
 	
 	class Meta:
 		model = Workout
+
+class NewMeasureForm(forms.ModelForm):
+	class Meta:
+		model = Measure

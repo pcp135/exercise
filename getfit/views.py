@@ -1,6 +1,6 @@
 from django.shortcuts import render
-from getfit.models import Workout, Score, Exercise
-from getfit.forms import WorkoutScoreForm, NewWorkoutForm
+from getfit.models import Workout, Score, Exercise, Measure
+from getfit.forms import WorkoutScoreForm, NewWorkoutForm, NewMeasureForm
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.utils import timezone
@@ -71,3 +71,16 @@ def edit(request, workout_id):
 			return render(request, 'add.html', {'form': form, 'type': "Edit", 'action': "Update"})
 	else:
 		return render(request, 'invalidworkout.html')
+		
+def measures(request):
+	return render(request, 'measures.html', {'measures': Measure.objects.all(), 'measure_active': 'active'})
+
+def addmeasure(request):
+	if request.method == 'POST':
+		form = NewMeasureForm(request.POST)
+		if form.is_valid():
+			form.save()
+			return HttpResponseRedirect(reverse('getfit.views.measures'))
+	else:
+		form = NewMeasureForm()		
+	return render(request, 'addmeasures.html', {'form': form})

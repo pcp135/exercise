@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Measures{% endblock %}
+{% block header %}Measures{% endblock %}
+{% block content %}
+	<div class="form-actions">
+		<a class="btn btn-primary" href= "{% url getfit.views.addmeasure %}">
+			Add measure</a>
+	</div>
+	<table class="table table-bordered table-striped span6">
+	    <tbody>
+			{% for measure in measures %}
+				<tr>
+					<td class="span2">{{ measure.name }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>				
+{% endblock %}

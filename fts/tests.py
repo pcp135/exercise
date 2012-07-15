@@ -265,4 +265,33 @@ class ExerciseTest(LiveServerTestCase):
 		self.assertIn("Wednesday 23 June 2010 @ 15:15", body.text)
 		self.assertIn("Jumping", body.text)
 		
+		#Now try to follow the Measures Link
+		self.browser.find_element_by_link_text("Measures").click()
+
+		#Check the page shows our existing measures
+		body = self.browser.find_element_by_tag_name('body')
+		self.assertIn("Length", body.text)
+		self.assertIn("Width", body.text)
+
+		#Check the page doesn't have a delete facility
+		self.assertNotIn("Delete", body.text)
+		
+		#Check it does have an add button/link
+		self.assertIn("Add measure", body.text)
+		
+		#follow the link to add a new measure
+		self.browser.find_element_by_link_text("Add measure").click()
+		
+		#Try to add a new measure
+		measure_field = self.browser.find_element_by_name('measure')
+		measure_field.send_keys('Breadth')
+		save_button = self.browser.find_element_by_xpath("//button[@type='submit']")
+		save_button.click()
+		
+		#Now Navigate back to the measures page and verify that the measure is there
+		self.browser.get(self.live_server_url + '/measures/')
+		body = self.browser.find_element_by_tag_name('body')
+		self.assertIn("Breadth", body.text)
+		
+		
 		

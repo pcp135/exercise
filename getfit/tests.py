@@ -294,3 +294,39 @@ class ViewTests(TestCase):
 		post_data = {self.meas1.name: "dd700", self.meas2.name: "204"}
 		response = self.client.post(reverse('getfit.views.workout', args=[self.work1.id,]), data=post_data)
 		self.assertIn('Enter a number', response.content)
+		
+	def test_home_page_has_a_link_to_measures_page(self):
+		response = self.client.get(reverse('getfit.views.home'))
+		self.assertIn('href= "' + reverse('getfit.views.measures') + '"', response.content)
+
+	def test_measures_page_exists_and_uses_correct_template(self):
+		response = self.client.get(reverse('getfit.views.measures'))
+		template_names_used = [t.name for t in response.templates]
+		self.assertIn('measures.html', template_names_used)
+
+	def test_measures_page_lists_existing_measures(self):
+		response = self.client.get(reverse('getfit.views.measures'))
+		self.assertIn(self.meas1.name, response.content)
+		self.assertIn(self.meas2.name, response.content)
+
+	def test_measures_view_has_add_button_and_no_delete_button(self):
+		response = self.client.get(reverse('getfit.views.measures'))
+		self.assertNotIn("Delete", response.content)
+		self.assertIn("Add measure", response.content)
+
+	def test_add_measures_page_exists_and_uses_correct_template(self):
+		response = self.client.get(reverse('getfit.views.addmeasure'))
+		template_names_used = [t.name for t in response.templates]
+		self.assertIn('addmeasures.html', template_names_used)
+
+	def test_add_measures_view_has_add_button(self):
+		response = self.client.get(reverse('getfit.views.addmeasure'))
+		self.assertIn("Add measure", response.content)
+
+	def test_add_measure_view_can_create_a_new_measure(self):
+		post_data = {'name': 'Strength'}
+		response = self.client.post(reverse('getfit.views.addmeasure'), data=post_data)
+		self.assertEquals(len(Measure.objects.all()), 3)
+		self.assertRedirects(response, reverse('getfit.views.measures'))
+		self.assertEquals(Measure.objects.get(pk=3).name, 'Strength')
+
