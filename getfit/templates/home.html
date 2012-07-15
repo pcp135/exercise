@@ -2,7 +2,7 @@
 {% block title %}Workouts{% endblock %}
 {% block header %}Workouts{% endblock %}
 {% block content %}
-	<div>
+	<div class="span12">
 		<table class="table table-bordered table-striped span6">
 		    <tbody>
 				{% for workout in workouts %}
@@ -19,19 +19,22 @@
 			</tbody>
 		</table>
 	</div>
-	<div class="pagination">
-	    <span class="step-links">
+	
+	<div class="pagination pagination-centered">
+		<ul>
+			<li><a href="?page=1">&laquo;</a></li>
 	        {% if workouts.has_previous %}
-	            <a href="?page={{ workouts.previous_page_number }}">Previous</a>
+				<li><a href="?page={{ workouts.previous_page_number }}">{{ workouts.previous_page_number }}</a></li>
+	        {% else %}
+				<li class="disabled"><a href="">...</a></li>
 	        {% endif %}
-
-	        <span class="current">
-	            Page {{ workouts.number }} of {{ workouts.paginator.num_pages }}
-	        </span>
-
+			<li class="active"><a href="">{{ workouts.number }}</a></li>
 	        {% if workouts.has_next %}
-	            <a href="?page={{ workouts.next_page_number }}">Next</a>
+				<li><a href="?page={{ workouts.next_page_number }}">{{ workouts.next_page_number }}</a></li>
+	        {% else %}
+				<li class="disabled"><a href="">...</a></li>
 	        {% endif %}
-	    </span>
-	</div>				
+			<li><a href="?page={{ workouts.paginator.num_pages }}">&raquo;</a></li>
+		</ul>
+	</div>			
 {% endblock %}
