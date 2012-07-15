@@ -7,7 +7,7 @@ from django.utils import timezone
 import pytz
 
 def home(request):
-	return render(request, 'home.html', {'workouts': Workout.objects.all().order_by('-time_of_workout')})
+	return render(request, 'home.html', {'workouts': Workout.objects.all().order_by('-time_of_workout'), 'home_active': "active"})
 	
 def workout(request, workout_id):
 	try:
@@ -39,7 +39,7 @@ def add(request):
 			return HttpResponseRedirect(reverse('getfit.views.workout', args=[workout.id,]))
 	else:
 		form = NewWorkoutForm()		
-	return render(request, 'add.html', {'form': form, 'type': "New", 'action': "Add"})
+	return render(request, 'add.html', {'form': form, 'type': "New", 'action': "Add", 'add_active': "active"})
 	
 def delete(request, workout_id):
 	try:
