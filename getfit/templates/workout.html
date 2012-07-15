@@ -9,11 +9,7 @@
 		<form class = "form-horizontal" method="POST" action="">
 			<fieldset>
 				{% csrf_token %}
-				{% for field in form %}
-					<div class="control-group">
-						{{ field|bootstrap }}
-					</div>
-				{% endfor %}
+				{{ form|bootstrap }}
 				<div class="form-actions">
 					<button type="submit" class="btn btn-primary">
 						Update workout

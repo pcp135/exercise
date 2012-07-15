@@ -15,12 +15,7 @@
 	<form class = "form-horizontal" method="POST" action="">
 		<fieldset>
 			{% csrf_token %}
-			<div class="control-group">
-				{{ form.exercise|bootstrap }}
-			</div>
-			<div class="control-group">
-				{{ form.time_of_workout|bootstrap }}
-			</div>
+			{{ form|bootstrap }}
 			<div class="form-actions">
 				<button type="submit" class="btn btn-primary">
 					{{ action }} workout
