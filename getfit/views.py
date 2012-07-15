@@ -67,7 +67,7 @@ def edit(request, workout_id):
 				return HttpResponseRedirect(reverse('getfit.views.workout', args=[workout.id,]))
 		else:
 			eastern=pytz.timezone('US/Eastern')
-			form = NewWorkoutForm({'exercise': workout.exercise.id, 'time_of_workout': workout.time_of_workout.astimezone(eastern).strftime('%Y-%m-%d %H:%M')})
+			form = NewWorkoutForm({'exercise': workout.exercise.id, 'time_of_workout_0': workout.time_of_workout.astimezone(eastern).strftime('%Y-%m-%d'), 'time_of_workout_1': workout.time_of_workout.astimezone(eastern).strftime('%H:%M')})
 			return render(request, 'add.html', {'form': form, 'type': "Edit", 'action': "Update"})
 	else:
 		return render(request, 'invalidworkout.html')
