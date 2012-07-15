@@ -283,7 +283,7 @@ class ExerciseTest(LiveServerTestCase):
 		self.browser.find_element_by_link_text("Add measure").click()
 		
 		#Try to add a new measure
-		measure_field = self.browser.find_element_by_name('measure')
+		measure_field = self.browser.find_element_by_name('name')
 		measure_field.send_keys('Breadth')
 		save_button = self.browser.find_element_by_xpath("//button[@type='submit']")
 		save_button.click()
@@ -293,5 +293,33 @@ class ExerciseTest(LiveServerTestCase):
 		body = self.browser.find_element_by_tag_name('body')
 		self.assertIn("Breadth", body.text)
 		
+		#Now try to visit the Exerices Link
+		self.browser.find_element_by_link_text("Exercises").click()
+		
+		#Check the page shows our existing exercises
+		body = self.browser.find_element_by_tag_name('body')
+		self.assertIn("Jumping", body.text)
+		self.assertIn("Reaching", body.text)
+		
+		#Check the page doesn't have a delete facility
+		self.assertNotIn("Delete", body.text)
+		
+		#Check it does have an add button/link
+		self.assertIn("Add exercise", body.text)
+		
+		#follow the link to add a new exercise
+		self.browser.find_element_by_link_text("Add exercise").click()
+		
+		#Try to add a new exercise
+		exercise_field = self.browser.find_element_by_name('name')
+		exercise_field.send_keys('Stretching')
+		self.assertFail("Need to fill in code to select measures")
+		save_button = self.browser.find_element_by_xpath("//button[@type='submit']")
+		save_button.click()
+		
+		#Now Navigate back to the measures page and verify that the measure is there
+		self.browser.get(self.live_server_url + '/exercises/')
+		body = self.browser.find_element_by_tag_name('body')
+		self.assertIn('Stretching', body.text)
 		
 		

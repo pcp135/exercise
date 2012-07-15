@@ -1,4 +1,5 @@
-add facility to add new exercises/measures
+add facility to add new exercises
 need to make it scale better on iphone
 add some kind of pagination
+expand exercises page to show activity in each area
 

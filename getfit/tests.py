@@ -330,3 +330,33 @@ class ViewTests(TestCase):
 		self.assertRedirects(response, reverse('getfit.views.measures'))
 		self.assertEquals(Measure.objects.get(pk=3).name, 'Strength')
 
+	def test_exercises_page_exists_and_uses_correct_template(self):
+		response = self.client.get(reverse('getfit.views.exercises'))
+		template_names_used = [t.name for t in response.templates]
+		self.assertIn('exercises.html', template_names_used)
+
+	def test_exercises_page_lists_existing_exercises(self):
+		response = self.client.get(reverse('getfit.views.exercises'))
+		self.assertIn(self.exer1.name, response.content)
+		self.assertIn(self.exer2.name, response.content)
+
+	def test_exercises_view_has_add_button_and_no_delete_button(self):
+		response = self.client.get(reverse('getfit.views.exercises'))
+		self.assertNotIn("Delete", response.content)
+		self.assertIn("Add exercise", response.content)
+
+	def test_add_exercises_page_exists_and_uses_correct_template(self):
+		response = self.client.get(reverse('getfit.views.addexercise'))
+		template_names_used = [t.name for t in response.templates]
+		self.assertIn('addexercise.html', template_names_used)
+
+	def test_add_exercise_view_has_add_button(self):
+		response = self.client.get(reverse('getfit.views.addexercise'))
+		self.assertIn("Add measure", response.content)
+
+	def test_add_exercise_view_can_create_a_new_exercise(self):
+		post_data = {'name': 'Leaping'}
+		response = self.client.post(reverse('getfit.views.exercise'), data=post_data)
+		self.assertEquals(len(Exercise.objects.all()), 3)
+		self.assertRedirects(response, reverse('getfit.views.exercise'))
+		self.assertEquals(Measure.objects.get(pk=3).name, 'Leaping')
