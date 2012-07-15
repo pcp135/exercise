@@ -1,4 +1,4 @@
-javascript date picker
+need to clean up css after date/time picker
 make the header bar show active pages
 need to make it scale better on iphone
 add some kind of pagination

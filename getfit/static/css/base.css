@@ -1,6 +1,5 @@
 /*
     DJANGO Admin styles
-*/
 
 body {
     margin: 0;
@@ -11,8 +10,8 @@ body {
     background: #fff;
 }
 
-/* LINKS */
-
+ LINKS */
+/*
 a:link, a:visited {
     color: #5b80b2;
     text-decoration: none;
@@ -30,8 +29,10 @@ a.section:link, a.section:visited {
     color: white;
     text-decoration: none;
 }
+*/
 
 /* GLOBAL DEFAULTS */
+/*
 
 p, ol, ul, dl {
     margin: .2em 0 .8em 0;
@@ -88,7 +89,7 @@ ul li {
     list-style-type: square;
     padding: 1px 0;
 }
-
+*/
 ul.plainlist {
     margin-left: 0 !important;
 }
@@ -100,12 +101,12 @@ ul.plainlist li {
 li ul {
     margin-bottom: 0;
 }
-
+/*
 li, dt, dd {
     font-size: 11px;
     line-height: 14px;
 }
-
+*/
 dt {
     font-weight: bold;
     margin-top: 4px;
@@ -188,11 +189,11 @@ p.mini {
     font-size: 10px !important;
     color: #999;
 }
-
+/*
 p img, h1 img, h2 img, h3 img, h4 img, td img {
     vertical-align: middle;
 }
-
+*/
 .quiet, a.quiet:link, a.quiet:visited {
     color: #999 !important;
     font-weight: normal !important;
@@ -238,7 +239,7 @@ table {
     border-collapse: collapse;
     border-color: #ccc;
 }
-
+/*
 td, th {
     font-size: 11px;
     line-height: 13px;
@@ -247,7 +248,7 @@ td, th {
     padding: 5px;
     font-family: "Lucida Grande", Verdana, Arial, sans-serif;
 }
-
+*/
 th {
     text-align: left;
     font-size: 12px;
@@ -403,7 +404,7 @@ input[type=text], input[type=password], textarea, select, .vTextField {
 
 
 /* MODULES */
-
+/*
 .module {
     border: 1px solid #ccc;
     margin-bottom: 5px;
@@ -426,7 +427,7 @@ input[type=text], input[type=password], textarea, select, .vTextField {
 .module h3 {
     margin-top: .6em;
 }
-
+*/
 .module h2, .module caption, .inline-group h2 {
     margin: 0;
     padding: 2px 5px 3px 5px;
@@ -436,13 +437,13 @@ input[type=text], input[type=password], textarea, select, .vTextField {
     background: #7CA0C7 url(../img/admin/default-bg.gif) top left repeat-x;
     color: white;
 }
-
+/*
 .module table {
     border-collapse: collapse;
 }
-
+*/
 /* MESSAGES & ERRORS */
-
+/*
 ul.messagelist {
     padding: 0 0 5px 0;
     margin: 0;
@@ -531,9 +532,9 @@ div.system-message p.system-message-title {
     font-size: 12px;
     padding: 5px 0 0 12px;
 }
-
+*/
 /* BREADCRUMBS */
-
+/*
 div.breadcrumbs {
     background: white url(../img/admin/nav-bg-reverse.gif) 0 -10px repeat-x;
     padding: 2px 8px 3px 8px;
@@ -543,9 +544,9 @@ div.breadcrumbs {
     border-bottom: 1px solid #ccc;
     text-align: left;
 }
-
+*/
 /* ACTION ICONS */
-
+/*
 .addlink {
     padding-left: 12px;
     background: url(../img/admin/icon_addlink.gif) 0 .2em no-repeat;
@@ -568,9 +569,9 @@ a.deletelink:link, a.deletelink:visited {
 a.deletelink:hover {
     color: #993333;
 }
-
+*/
 /* OBJECT TOOLS */
-
+/*
 .object-tools {
     font-size: 10px;
     font-weight: bold;
@@ -633,9 +634,9 @@ a.deletelink:hover {
 .object-tools a.addlink:hover {
     background: #5b80b2 url(../img/admin/tooltag-add_over.gif) top right no-repeat;
 }
-
+*/
 /* OBJECT HISTORY */
-
+/*
 table#change-history {
     width: 100%;
 }
@@ -643,9 +644,9 @@ table#change-history {
 table#change-history tbody th {
     width: 16em;
 }
-
+*/
 /* PAGE STRUCTURE */
-
+/*
 #container {
     position: relative;
     width: 100%;
@@ -677,9 +678,9 @@ table#change-history tbody th {
     clear: both;
     padding: 10px;
 }
-
+*/
 /* COLUMN TYPES */
-
+/*
 .colMS {
     margin-right: 20em !important;
 }
@@ -711,9 +712,9 @@ table#change-history tbody th {
 .dashboard #content {
     width: 500px;
 }
-
+*/
 /* HEADER */
-
+/*
 #header {
     background: #417690;
     color: #ffc;
@@ -752,9 +753,9 @@ table#change-history tbody th {
     font-size: 11px;
     text-align: right;
 }
-
+*/
 /* SIDEBAR */
-
+/*
 #content-related h3 {
     font-size: 12px;
     color: #666;
@@ -769,4 +770,4 @@ table#change-history tbody th {
     background: #eee url(../img/admin/nav-bg.gif) bottom left repeat-x;
     color: #666;
 }
-
+*/
