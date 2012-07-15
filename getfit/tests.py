@@ -250,12 +250,14 @@ class ViewTests(TestCase):
 		self.assertRedirects(response, reverse('getfit.views.home'))
 		
 	def test_trying_to_open_an_invalid_workout_tells_you_it_doesnt_exist(self):
-		response = self.client.get('/workout/200/')
-		self.assertIn("That workout doesn't exist", response.content)
+		response = self.client.get('/workout/200/', follow=True)
+		self.assertRedirects(response, reverse('getfit.views.home'))
+		self.assertIn(u"That workout doesn", response.content)
 
 	def test_trying_to_delete_an_invalid_workout_tells_you_it_doesnt_exist(self):
-		response = self.client.get(reverse('getfit.views.workout', args=[200,]))
-		self.assertIn("That workout doesn't exist", response.content)
+		response = self.client.get(reverse('getfit.views.workout', args=[200,]), follow=True)
+		self.assertRedirects(response, reverse('getfit.views.home'))
+		self.assertIn(u"That workout doesn", response.content)
 		
 	def test_workout_view_has_edit_button(self):
 		response = self.client.get(reverse('getfit.views.workout', args=[self.work1.id,]))
@@ -375,23 +377,14 @@ class ViewTests(TestCase):
 		self.assertNotIn(work1_url, response.content)
 		self.assertNotIn(work26_url, response.content)
 		self.assertIn(work51_url, response.content)
-		self.assertNotIn("Previous", response.content)		
-		self.assertIn("Page 1 of 3", response.content)		
-		self.assertIn("Next", response.content)		
 		
 		response = self.client.get(reverse('getfit.views.home'), {'page': '2'})
 		self.assertNotIn(work1_url, response.content)
 		self.assertIn(work26_url, response.content)
 		self.assertNotIn(work51_url, response.content)
-		self.assertIn("Previous", response.content)		
-		self.assertIn("Page 2 of 3", response.content)		
-		self.assertIn("Next", response.content)		
 		
 		response = self.client.get(reverse('getfit.views.home'), {'page': '3'})
 		self.assertIn(work1_url, response.content)
 		self.assertNotIn(work26_url, response.content)
 		self.assertNotIn(work51_url, response.content)
-		self.assertIn("Previous", response.content)		
-		self.assertIn("Page 3 of 3", response.content)		
-		self.assertNotIn("Next", response.content)		
 		

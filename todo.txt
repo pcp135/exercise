@@ -1,4 +1,3 @@
 need to make it scale better on iphone
-add some kind of pagination
 expand exercises page to show activity in each area
 

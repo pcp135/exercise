@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.utils import timezone
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.contrib import messages
 import pytz
 
 def home(request):
@@ -33,13 +34,15 @@ def workout(request, workout_id):
 				for score in workout.score_set.all():
 					score.result=request.POST[score.measure.name]
 					score.save()
+				messages.success(request, 'Your scores have been recorded.')
 				return HttpResponseRedirect(reverse('getfit.views.home'))
 		else:
 			form = WorkoutScoreForm(workout)
 		context = {'workout': workout, 'form': form}
 		return render(request, 'workout.html', context)	
 	else:
-		return render(request, 'invalidworkout.html')
+		messages.error(request, u"That workout doesn't exist.")
+		return HttpResponseRedirect(reverse('getfit.views.home'))
 	
 def add(request):
 	if request.method == 'POST':
@@ -48,6 +51,7 @@ def add(request):
 			workout=form.save()
 			for meas in workout.exercise.measure.all():
 				Score(workout=workout, measure=meas, result=0).save()
+			messages.success(request, 'Your workout has been added, please update results.')
 			return HttpResponseRedirect(reverse('getfit.views.workout', args=[workout.id,]))
 	else:
 		form = NewWorkoutForm()		
@@ -60,9 +64,11 @@ def delete(request, workout_id):
 		workout = None
 	if workout:
 		workout.delete()
+		messages.success(request, 'Workout deleted.')
 		return HttpResponseRedirect(reverse('getfit.views.home'))
 	else:
-		return render(request, 'invalidworkout.html')
+		messages.error(request, u"That workout doesn't exist.")
+		return HttpResponseRedirect(reverse('getfit.views.home'))
 		
 def edit(request, workout_id):
 	try:
@@ -76,13 +82,15 @@ def edit(request, workout_id):
 				workout.exercise = form.cleaned_data['exercise']
 				workout.time_of_workout = form.cleaned_data['time_of_workout']
 				workout.save()
+				messages.success(request, 'Your workout has been updated.')
 				return HttpResponseRedirect(reverse('getfit.views.workout', args=[workout.id,]))
 		else:
 			eastern=pytz.timezone('US/Eastern')
 			form = NewWorkoutForm({'exercise': workout.exercise.id, 'time_of_workout_0': workout.time_of_workout.astimezone(eastern).strftime('%Y-%m-%d'), 'time_of_workout_1': workout.time_of_workout.astimezone(eastern).strftime('%H:%M')})
 			return render(request, 'add.html', {'form': form, 'type': "Edit", 'action': "Update"})
 	else:
-		return render(request, 'invalidworkout.html')
+		messages.error(request, u"That workout doesn't exist.")
+		return HttpResponseRedirect(reverse('getfit.views.home'))
 		
 def measures(request):
 	return render(request, 'measures.html', {'measures': Measure.objects.all(), 'measure_active': 'active'})
@@ -92,6 +100,7 @@ def addmeasure(request):
 		form = NewMeasureForm(request.POST)
 		if form.is_valid():
 			form.save()
+			messages.success(request, 'Your new measure has been added.')
 			return HttpResponseRedirect(reverse('getfit.views.measures'))
 	else:
 		form = NewMeasureForm()		
@@ -105,6 +114,7 @@ def addexercise(request):
 		form = NewExerciseForm(request.POST)
 		if form.is_valid():
 			form.save()
+			messages.success(request, 'Your new exercise has been added.')
 			return HttpResponseRedirect(reverse('getfit.views.exercises'))
 	else:
 		form = NewExerciseForm()	
