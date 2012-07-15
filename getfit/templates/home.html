@@ -2,19 +2,36 @@
 {% block title %}Workouts{% endblock %}
 {% block header %}Workouts{% endblock %}
 {% block content %}
-	<table class="table table-bordered table-striped span6">
-	    <tbody>
-			{% for workout in workouts %}
-				<tr>
-					<td class="span2">
-						<a href= "{% url getfit.views.workout workout.id %}">
-							{{ workout.exercise }}</a> 
-					</td>
-					<td class="span3">
-						{{ workout.time_of_workout|date:"l d F Y" }}
-					</td>
-				</tr>
-			{% endfor %}
-		</tbody>
-	</table>				
+	<div>
+		<table class="table table-bordered table-striped span6">
+		    <tbody>
+				{% for workout in workouts %}
+					<tr>
+						<td class="span2">
+							<a href= "{% url getfit.views.workout workout.id %}">
+								{{ workout.exercise }}</a> 
+						</td>
+						<td class="span3">
+							{{ workout.time_of_workout|date:"l d F Y" }}
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	<div class="pagination">
+	    <span class="step-links">
+	        {% if workouts.has_previous %}
+	            <a href="?page={{ workouts.previous_page_number }}">Previous</a>
+	        {% endif %}
+
+	        <span class="current">
+	            Page {{ workouts.number }} of {{ workouts.paginator.num_pages }}
+	        </span>
+
+	        {% if workouts.has_next %}
+	            <a href="?page={{ workouts.next_page_number }}">Next</a>
+	        {% endif %}
+	    </span>
+	</div>				
 {% endblock %}

@@ -4,10 +4,22 @@ from getfit.forms import WorkoutScoreForm, NewWorkoutForm, NewMeasureForm, NewEx
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.utils import timezone
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import pytz
 
 def home(request):
-	return render(request, 'home.html', {'workouts': Workout.objects.all().order_by('-time_of_workout'), 'home_active': "active"})
+	workout_list = Workout.objects.all().order_by('-time_of_workout')
+	paginator = Paginator(workout_list, 25)
+
+	page = request.GET.get('page')
+	try:
+		workouts = paginator.page(page)
+	except PageNotAnInteger:
+		workouts = paginator.page(1)
+	except EmptyPage:
+		workouts = paginator.page(paginator.num_pages)
+
+	return render(request, 'home.html', {'workouts': workouts, 'home_active': "active"})
 	
 def workout(request, workout_id):
 	try:

@@ -360,3 +360,38 @@ class ViewTests(TestCase):
 		self.assertEquals(len(Exercise.objects.all()), 3)
 		self.assertRedirects(response, reverse('getfit.views.exercises'))
 		self.assertEquals(Exercise.objects.get(pk=3).name, 'Leaping')
+		
+	def test_if_we_have_more_than_25_workouts_they_get_paginated(self):
+		for i in range(1,50):
+			post_data = {'exercise': str(self.exer1.id), 'time_of_workout_0': "2015-05-01", 'time_of_workout_1': "15:%d" % i}
+			response = self.client.post(reverse('getfit.views.add'), data=post_data)
+		self.assertEquals(len(Workout.objects.all()), 51)
+		
+		work1_url = reverse('getfit.views.workout', args=[1,])
+		work26_url = reverse('getfit.views.workout', args=[26,])
+		work51_url = reverse('getfit.views.workout', args=[51,])
+
+		response = self.client.get(reverse('getfit.views.home'))
+		self.assertNotIn(work1_url, response.content)
+		self.assertNotIn(work26_url, response.content)
+		self.assertIn(work51_url, response.content)
+		self.assertNotIn("Previous", response.content)		
+		self.assertIn("Page 1 of 3", response.content)		
+		self.assertIn("Next", response.content)		
+		
+		response = self.client.get(reverse('getfit.views.home'), {'page': '2'})
+		self.assertNotIn(work1_url, response.content)
+		self.assertIn(work26_url, response.content)
+		self.assertNotIn(work51_url, response.content)
+		self.assertIn("Previous", response.content)		
+		self.assertIn("Page 2 of 3", response.content)		
+		self.assertIn("Next", response.content)		
+		
+		response = self.client.get(reverse('getfit.views.home'), {'page': '3'})
+		self.assertIn(work1_url, response.content)
+		self.assertNotIn(work26_url, response.content)
+		self.assertNotIn(work51_url, response.content)
+		self.assertIn("Previous", response.content)		
+		self.assertIn("Page 3 of 3", response.content)		
+		self.assertNotIn("Next", response.content)		
+		
