@@ -10,7 +10,7 @@ import pytz
 
 def home(request):
 	workout_list = Workout.objects.all().order_by('-time_of_workout')
-	paginator = Paginator(workout_list, 20)
+	paginator = Paginator(workout_list, 15)
 
 	page = request.GET.get('page')
 	try:
