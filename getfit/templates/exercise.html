@@ -5,20 +5,22 @@
 {% load tz %}
 <div class="span12">
 	<table class="table table-bordered table-striped span6">
-	    <tbody>
+		<thead>
 			<tr>
-				<td class="span3">
-					Date
+				<td class="span4">
+					<strong>Date</strong>
 				</td>
 				{% for measure in exercise.measure.all %}
 					<td class="span2">
-						{{ measure.name }}
+						<strong>{{ measure.name }}</strong>
 					</td>
 				{% endfor %}
 			</tr>
+		</thead>
+	    <tbody>
 			{% for workout in workouts %}
 				<tr>
-					<td class="span3">
+					<td class="span4">
 						<a href= "{% url getfit.views.workout workout.id %}">
 							{{ workout.time_of_workout|date:"l d F Y" }}
 						</a>
