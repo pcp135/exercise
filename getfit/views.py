@@ -55,7 +55,7 @@ def add(request):
 			return HttpResponseRedirect(reverse('getfit.views.workout', args=[workout.id,]))
 	else:
 		form = NewWorkoutForm()		
-	return render(request, 'add.html', {'form': form, 'type': "New", 'action': "Add", 'add_active': "active"})
+	return render(request, 'add.html', {'form': form, 'type': "New", 'action': "Add", 'add_active': "active", 'jspath': '/django/contrib/admin/media/'})
 	
 def delete(request, workout_id):
 	try:

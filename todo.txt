@@ -1,3 +1,2 @@
 need to make it scale better on iphone
-expand exercises page to show activity in each area
-
+some kind of chart on exercise page?
