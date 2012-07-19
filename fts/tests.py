@@ -360,4 +360,7 @@ class ExerciseTest(LiveServerTestCase):
 		self.assertIn('Breadth', body.text)
 		self.assertIn('345', body.text)
 		
+		#Now go to workout 4 and check we have a link back to the exercise page
+		self.browser.get(self.live_server_url + '/workout/4/')
+		self.browser.find_element_by_link_text("Stretching").click()
 		

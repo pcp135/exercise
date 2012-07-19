@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block title %}{{ workout.exercise.name }}{% endblock %}
-{% block header %}{{ workout.exercise.name }}{% endblock %}
+{% block header %}<a href= "{% url getfit.views.exercise workout.exercise.id %}">{{ workout.exercise.name }}</a>{% endblock %}
 {% block content %}
 {% load tz %}
 	<h2>{{ workout.time_of_workout|localtime|date:"l d F Y @ H:i" }}<br><br></h2>

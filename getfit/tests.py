@@ -419,3 +419,9 @@ class ViewTests(TestCase):
 		self.assertIn('2202', response.content)
 		work1_url = reverse('getfit.views.workout', args=[1,])
 		self.assertIn(work1_url, response.content)
+
+	def test_workout_page_links_back_to_exercise(self):
+		response = self.client.get(reverse('getfit.views.workout', args=[1,]))
+		exer1_url = reverse('getfit.views.exercise', args=[1,])
+		self.assertIn(exer1_url, response.content)
+		
