@@ -10,7 +10,11 @@
 	    <tbody>
 			{% for exercise in exercises %}
 				<tr>
-					<td class="span2">{{ exercise.name }}</td>
+					<td class="span2">
+						<a href= "{% url getfit.views.exercise exercise.id %}">
+							{{ exercise.name }}
+						</a>
+					</td>
 				</tr>
 			{% endfor %}
 		</tbody>

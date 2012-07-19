@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}{{ exercise.name }}{% endblock %}
+{% block header %}{{ exercise.name }}{% endblock %}
+{% block content %}
+{% load tz %}
+<div class="span12">
+	<table class="table table-bordered table-striped span6">
+	    <tbody>
+			<tr>
+				<td class="span3">
+					Date
+				</td>
+				{% for measure in exercise.measure.all %}
+					<td class="span2">
+						{{ measure.name }}
+					</td>
+				{% endfor %}
+			</tr>
+			{% for workout in workouts %}
+				<tr>
+					<td class="span3">
+						<a href= "{% url getfit.views.workout workout.id %}">
+							{{ workout.time_of_workout|date:"l d F Y" }}
+						</a>
+					</td>
+					{% for score in workout.score_set.all %}
+						<td class="span2">
+							{{ score.result }}
+						</td>
+					{% endfor %}
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
+{% endblock %}

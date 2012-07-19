@@ -383,8 +383,39 @@ class ViewTests(TestCase):
 		self.assertIn(work26_url, response.content)
 		self.assertNotIn(work51_url, response.content)
 		
-		response = self.client.get(reverse('getfit.views.home'), {'page': '3'})
+		response = self.client.get(reverse('getfit.views.home'), {'page': '4'})
 		self.assertIn(work1_url, response.content)
 		self.assertNotIn(work26_url, response.content)
 		self.assertNotIn(work51_url, response.content)
 		
+		response = self.client.get(reverse('getfit.views.home'), {'page': '400'})
+		self.assertIn(work1_url, response.content)
+		self.assertNotIn(work26_url, response.content)
+		self.assertNotIn(work51_url, response.content)
+
+		response = self.client.get(reverse('getfit.views.home'), {'page': 'bob'})
+		self.assertNotIn(work1_url, response.content)
+		self.assertNotIn(work26_url, response.content)
+		self.assertIn(work51_url, response.content)
+
+	def test_exercises_page_has_link_to_individual_exercise_pages(self):
+		response = self.client.get(reverse('getfit.views.exercises'))
+		exer1_url = reverse('getfit.views.exercise', args=[1,])
+		exer2_url = reverse('getfit.views.exercise', args=[2,])
+		self.assertIn(exer1_url, response.content)
+		self.assertIn(exer2_url, response.content)
+
+	def test_exercise_page_exists_and_uses_correct_template(self):
+		response = self.client.get(reverse('getfit.views.exercise', args=[1,]))
+		template_names_used = [t.name for t in response.templates]
+		self.assertIn('exercise.html', template_names_used)
+
+	def test_exercise_page_has_details_of_workout(self):
+		response = self.client.get(reverse('getfit.views.exercise', args=[1,]))
+		self.assertIn('Testing', response.content)
+		self.assertIn('Reps', response.content)
+		self.assertIn('Time', response.content)
+		self.assertIn('2201', response.content)
+		self.assertIn('2202', response.content)
+		work1_url = reverse('getfit.views.workout', args=[1,])
+		self.assertIn(work1_url, response.content)

@@ -119,3 +119,16 @@ def addexercise(request):
 	else:
 		form = NewExerciseForm()	
 	return render(request, 'addexercise.html', {'form': form})
+
+def exercise(request, exercise_id):
+	try:
+		exer = Exercise.objects.get(pk = exercise_id)
+	except:
+		exer = None
+	if exer:
+		workout_list = Workout.objects.filter(exercise=exer).order_by('-time_of_workout')
+		return render(request, 'exercise.html', {'exercise': exer, 'workouts': workout_list})
+	else:
+		messages.error(request, u"That exercise doesn't exist.")
+		return HttpResponseRedirect(reverse('getfit.views.exercises'))
+		

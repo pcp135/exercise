@@ -318,7 +318,7 @@ class ExerciseTest(LiveServerTestCase):
 		save_button = self.browser.find_element_by_xpath("//button[@type='submit']")
 		save_button.click()
 		
-		#Now Navigate back to the measures page and verify that the measure is there
+		#Now Navigate back to the exercises page and verify that the exercise is there
 		self.browser.get(self.live_server_url + '/exercises/')
 		body = self.browser.find_element_by_tag_name('body')
 		self.assertIn('Stretching', body.text)
@@ -347,4 +347,17 @@ class ExerciseTest(LiveServerTestCase):
 		result_field.send_keys('345')
 		save_button = self.browser.find_element_by_xpath("//button[@type='submit']")
 		save_button.click()
+		
+		#Now Navigate back to the exercises page and then click the link for our first exercise
+		self.browser.get(self.live_server_url + '/exercises/')
+		self.browser.find_element_by_link_text("Stretching").click()
+
+		#The page should have details of our exercise
+		body = self.browser.find_element_by_tag_name('body')
+		self.assertIn('Stretching', body.text)
+		self.assertIn('Width', body.text)
+		self.assertIn('234', body.text)
+		self.assertIn('Breadth', body.text)
+		self.assertIn('345', body.text)
+		
 		

@@ -16,6 +16,7 @@ urlpatterns = patterns('',
     url(r'^measures/add/$', 'getfit.views.addmeasure'),
     url(r'^exercises/$', 'getfit.views.exercises'),
     url(r'^exercises/add/$', 'getfit.views.addexercise'),
+    url(r'^exercise/(\d+)/$', 'getfit.views.exercise'),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
