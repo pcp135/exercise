@@ -14,7 +14,7 @@ class WorkoutScoreForm(forms.Form):
 				self.fields[score.measure.name] = forms.DecimalField()
 
 class NewWorkoutForm(forms.ModelForm):
-	time_of_workout = forms.SplitDateTimeField(widget=widgets.AdminSplitDateTime)
+	time_of_workout = forms.DateField(widget=widgets.AdminDateWidget)
 	
 	class Meta:
 		model = Workout

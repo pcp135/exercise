@@ -159,11 +159,11 @@ class ViewTests(TestCase):
 		work2_url = reverse('getfit.views.workout', args=[self.work2.id,])
 		self.assertIn(work2_url, response.content)
 		
-	def test_workout_page_lists_exercise_and_date_and_time_of_workout(self):
+	def test_workout_page_lists_exercise_and_date_but_not_time_of_workout(self):
 		response = self.client.get(reverse('getfit.views.workout', args=[self.work2.id,]))
 		self.assertIn(self.work2.exercise.name, response.content)
 		self.assertIn(self.work2.time_of_workout.astimezone(self.eastern).strftime("%A %d %B %Y"), response.content)
-		self.assertIn(self.work2.time_of_workout.astimezone(self.eastern).strftime("%H:%M"), response.content)
+		self.assertNotIn(self.work2.time_of_workout.astimezone(self.eastern).strftime("%H:%M"), response.content)
 		
 	def test_workout_lists_each_score(self):
 		response = self.client.get(reverse('getfit.views.workout', args=[self.work1.id,]))
@@ -205,12 +205,12 @@ class ViewTests(TestCase):
 		self.assertTrue(isinstance(response.context['form'], NewWorkoutForm))
 		
 	def test_add_view_can_create_a_new_workout(self):
-		post_data = {'exercise': str(self.exer1.id), 'time_of_workout_0': "2010-05-01", 'time_of_workout_1': "15:15"}
+		post_data = {'exercise': str(self.exer1.id), 'time_of_workout': "2010-05-01"}
 		response = self.client.post(reverse('getfit.views.add'), data=post_data)
 		self.assertEquals(len(Workout.objects.all()), 3)
 		self.assertRedirects(response, reverse('getfit.views.workout', args=[3,]))
 
-		post_data = {'exercise': str(self.exer2.id), 'time_of_workout_0': "2010-05-01", 'time_of_workout_1': "16:16"}
+		post_data = {'exercise': str(self.exer2.id), 'time_of_workout': "2010-05-02"}
 		response = self.client.post(reverse('getfit.views.add'), data=post_data)
 		self.assertEquals(len(Workout.objects.all()), 4)
 
@@ -223,19 +223,13 @@ class ViewTests(TestCase):
 		self.assertIn("Time", response.content)
 		
 	def test_add_view_cant_create_workout_with_invalid_date(self):
-		post_data = {'exercise': str(self.exer1.id), 'time_of_workout_0': "2010-565-01", 'time_of_workout_1': "15:15"}
+		post_data = {'exercise': str(self.exer1.id), 'time_of_workout': "2010-565-01"}
 		response = self.client.post(reverse('getfit.views.add'), data=post_data)
 		self.assertEquals(len(Workout.objects.all()), 2)
 		self.assertIn('Enter a valid date', response.content)
 
-	def test_add_view_cant_create_workout_with_invalid_date(self):
-		post_data = {'exercise': str(self.exer1.id), 'time_of_workout_0': "2010-5-01", 'time_of_workout_1': "155:15"}
-		response = self.client.post(reverse('getfit.views.add'), data=post_data)
-		self.assertEquals(len(Workout.objects.all()), 2)
-		self.assertIn('Enter a valid time', response.content)
-
 	def test_add_view_cant_create_workout_with_invalid_exercise(self):
-		post_data = {'exercise': "700", 'time_of_workout_0': "2010-05-01", 'time_of_workout_1': "15:15"}
+		post_data = {'exercise': "700", 'time_of_workout': "2010-05-01"}
 		response = self.client.post(reverse('getfit.views.add'), data=post_data)
 		self.assertEquals(len(Workout.objects.all()), 2)
 		self.assertIn('Select a valid choice', response.content)
@@ -264,7 +258,7 @@ class ViewTests(TestCase):
 		self.assertIn("Edit this workout", response.content)
 
 	def test_editing_a_workout_date_updates_it(self):
-		post_data = {'exercise': str(self.exer1.id), 'time_of_workout_0': "2010-06-01", 'time_of_workout_1': "15:15"}
+		post_data = {'exercise': str(self.exer1.id), 'time_of_workout': "2010-06-01"}
 		response = self.client.post(reverse('getfit.views.edit', args=[self.work1.id,]), data=post_data)
 		self.assertEquals(len(Workout.objects.all()), 2)
 		self.assertRedirects(response, reverse('getfit.views.workout', args=[self.work1.id,]))
@@ -273,7 +267,7 @@ class ViewTests(TestCase):
 
 	def test_editing_a_workout_exercise_updates_it(self):
 		self.assertEquals(self.work1.exercise, self.exer1)
-		post_data = {'exercise': str(self.exer2.id), 'time_of_workout_0': str(self.work1.time_of_workout.astimezone(self.eastern).strftime('%Y-%m-%d')), 'time_of_workout_1': str(self.work1.time_of_workout.astimezone(self.eastern).strftime('%H:%M'))}
+		post_data = {'exercise': str(self.exer2.id), 'time_of_workout': str(self.work1.time_of_workout.astimezone(self.eastern).strftime('%Y-%m-%d'))}
 		response = self.client.post(reverse('getfit.views.edit', args=[self.work1.id,]), data=post_data)
 		self.assertEquals(len(Workout.objects.all()), 2)
 		self.assertRedirects(response, reverse('getfit.views.workout', args=[self.work1.id,]))
@@ -364,8 +358,8 @@ class ViewTests(TestCase):
 		self.assertEquals(Exercise.objects.get(pk=3).name, 'Leaping')
 		
 	def test_if_we_have_more_than_25_workouts_they_get_paginated(self):
-		for i in range(1,50):
-			post_data = {'exercise': str(self.exer1.id), 'time_of_workout_0': "2015-05-01", 'time_of_workout_1': "15:%d" % i}
+		for i in range(10,59):
+			post_data = {'exercise': str(self.exer1.id), 'time_of_workout': "20%d-05-01" % i}
 			response = self.client.post(reverse('getfit.views.add'), data=post_data)
 		self.assertEquals(len(Workout.objects.all()), 51)
 		

@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 from django.utils import timezone
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
+import datetime
 import pytz
 
 def home(request):
@@ -49,6 +50,9 @@ def add(request):
 		form = NewWorkoutForm(request.POST)
 		if form.is_valid():
 			workout=form.save()
+			timestamp=timezone.now().astimezone(pytz.timezone('US/Eastern'))
+			workout.time_of_workout = workout.time_of_workout + datetime.timedelta(hours=timestamp.hour, minutes=timestamp.minute)
+			workout.save()
 			for meas in workout.exercise.measure.all():
 				Score(workout=workout, measure=meas, result=0).save()
 			messages.success(request, 'Your workout has been added, please update results.')
