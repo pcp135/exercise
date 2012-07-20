@@ -1,2 +1,3 @@
+need to remove time from time of workout
 need to make it scale better on iphone
 some kind of chart on exercise page?
