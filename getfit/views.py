@@ -50,8 +50,7 @@ def add(request):
 		form = NewWorkoutForm(request.POST)
 		if form.is_valid():
 			workout=form.save()
-			timestamp=timezone.now().astimezone(pytz.timezone('US/Eastern'))
-			workout.time_of_workout = workout.time_of_workout + datetime.timedelta(hours=timestamp.hour, minutes=timestamp.minute)
+			workout.time_of_workout = workout.time_of_workout.strftime("%Y-%m-%d") + timezone.now().strftime(" %H:%M:%S+00:00")		
 			workout.save()
 			for meas in workout.exercise.measure.all():
 				Score(workout=workout, measure=meas, result=0).save()
@@ -85,12 +84,13 @@ def edit(request, workout_id):
 			if form.is_valid():
 				workout.exercise = form.cleaned_data['exercise']
 				workout.time_of_workout = form.cleaned_data['time_of_workout']
+				workout.time_of_workout = workout.time_of_workout.strftime("%Y-%m-%d") + timezone.now().strftime(" %H:%M:%S+00:00")		
 				workout.save()
 				messages.success(request, 'Your workout has been updated.')
 				return HttpResponseRedirect(reverse('getfit.views.workout', args=[workout.id,]))
 		else:
 			eastern=pytz.timezone('US/Eastern')
-			form = NewWorkoutForm({'exercise': workout.exercise.id, 'time_of_workout_0': workout.time_of_workout.astimezone(eastern).strftime('%Y-%m-%d'), 'time_of_workout_1': workout.time_of_workout.astimezone(eastern).strftime('%H:%M')})
+			form = NewWorkoutForm({'exercise': workout.exercise.id, 'time_of_workout': workout.time_of_workout.astimezone(eastern).strftime('%Y-%m-%d')})
 			return render(request, 'add.html', {'form': form, 'type': "Edit", 'action': "Update"})
 	else:
 		messages.error(request, u"That workout doesn't exist.")

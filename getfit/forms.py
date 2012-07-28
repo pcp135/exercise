@@ -15,10 +15,10 @@ class WorkoutScoreForm(forms.Form):
 
 class NewWorkoutForm(forms.ModelForm):
 	time_of_workout = forms.DateField(widget=widgets.AdminDateWidget)
-	
+
 	class Meta:
 		model = Workout
-
+		
 class NewMeasureForm(forms.ModelForm):
 	class Meta:
 		model = Measure

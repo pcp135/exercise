@@ -4,11 +4,9 @@ from getfit.models import Exercise, Measure, Workout, Score
 from getfit.forms import WorkoutScoreForm, NewWorkoutForm
 from django.core.urlresolvers import reverse
 from datetime import timedelta
-import pytz
 
 class ModelTests(TestCase):
 	def setUp(self):
-		self.eastern=pytz.timezone('US/Eastern')
 		self.meas = Measure()
 		self.meas.name = "Reps"
 		self.meas.save()
@@ -105,7 +103,6 @@ class ModelTests(TestCase):
 		
 class ViewTests(TestCase):
 	def setUp(self):
-		self.eastern=pytz.timezone('US/Eastern')
 		self.exer1 = Exercise(name = 'Testing')
 		self.exer1.save()
 		
@@ -144,8 +141,8 @@ class ViewTests(TestCase):
 		response = self.client.get(reverse('getfit.views.home'))
 		self.assertIn(self.work1.exercise.name, response.content)
 		self.assertIn(self.work2.exercise.name, response.content)
-		self.assertIn(self.work1.time_of_workout.astimezone(self.eastern).strftime("%A %d %B %Y"), response.content)
-		self.assertIn(self.work2.time_of_workout.astimezone(self.eastern).strftime("%A %d %B %Y"), response.content)
+		self.assertIn(self.work1.time_of_workout.strftime("%A %d %B %Y"), response.content)
+		self.assertIn(self.work2.time_of_workout.strftime("%A %d %B %Y"), response.content)
 		
 	def test_workout_page_exists_and_uses_correct_template(self):
 		response = self.client.get(reverse('getfit.views.workout', args=[self.work2.id,]))
@@ -162,8 +159,8 @@ class ViewTests(TestCase):
 	def test_workout_page_lists_exercise_and_date_but_not_time_of_workout(self):
 		response = self.client.get(reverse('getfit.views.workout', args=[self.work2.id,]))
 		self.assertIn(self.work2.exercise.name, response.content)
-		self.assertIn(self.work2.time_of_workout.astimezone(self.eastern).strftime("%A %d %B %Y"), response.content)
-		self.assertNotIn(self.work2.time_of_workout.astimezone(self.eastern).strftime("%H:%M"), response.content)
+		self.assertIn(self.work2.time_of_workout.strftime("%A %d %B %Y"), response.content)
+		self.assertNotIn(self.work2.time_of_workout.strftime("%H:%M"), response.content)
 		
 	def test_workout_lists_each_score(self):
 		response = self.client.get(reverse('getfit.views.workout', args=[self.work1.id,]))
@@ -263,11 +260,11 @@ class ViewTests(TestCase):
 		self.assertEquals(len(Workout.objects.all()), 2)
 		self.assertRedirects(response, reverse('getfit.views.workout', args=[self.work1.id,]))
 		chgdWorkout = Workout.objects.get(pk = self.work1.id)
-		self.assertEquals("Tuesday 01 June 2010", chgdWorkout.time_of_workout.astimezone(self.eastern).strftime("%A %d %B %Y"))
+		self.assertEquals("Tuesday 01 June 2010", chgdWorkout.time_of_workout.strftime("%A %d %B %Y"))
 
 	def test_editing_a_workout_exercise_updates_it(self):
 		self.assertEquals(self.work1.exercise, self.exer1)
-		post_data = {'exercise': str(self.exer2.id), 'time_of_workout': str(self.work1.time_of_workout.astimezone(self.eastern).strftime('%Y-%m-%d'))}
+		post_data = {'exercise': str(self.exer2.id), 'time_of_workout': str(self.work1.time_of_workout.strftime('%Y-%m-%d'))}
 		response = self.client.post(reverse('getfit.views.edit', args=[self.work1.id,]), data=post_data)
 		self.assertEquals(len(Workout.objects.all()), 2)
 		self.assertRedirects(response, reverse('getfit.views.workout', args=[self.work1.id,]))
