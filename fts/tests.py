@@ -150,7 +150,6 @@ class ExerciseTest(LiveServerTestCase):
 		#choose the second type of exercise
 		self.browser.find_element_by_xpath("//select/option[@value='2']").click()
 		self.browser.find_element_by_link_text("Today").click()
-		self.browser.find_element_by_link_text("Now").click()
 		save_button = self.browser.find_element_by_xpath("//button[@type='submit']")
 		save_button.click()
 
@@ -182,12 +181,9 @@ class ExerciseTest(LiveServerTestCase):
 		self.browser.get(self.live_server_url + '/workout/add/')
 
 		#give an invalid date
-		date_field = self.browser.find_element_by_name('time_of_workout_0')
+		date_field = self.browser.find_element_by_name('time_of_workout')
 		date_field.clear()
 		date_field.send_keys('2010-565-23')
-		time_field = self.browser.find_element_by_name('time_of_workout_1')
-		time_field.clear()
-		time_field.send_keys('15:15')
 		save_button = self.browser.find_element_by_xpath("//button[@type='submit']")
 		save_button.click()
 		
@@ -229,19 +225,16 @@ class ExerciseTest(LiveServerTestCase):
 		self.browser.get(self.live_server_url + '/workout/2/edit/')
 		
 		#And try to edit it
-		date_field = self.browser.find_element_by_name('time_of_workout_0')
+		date_field = self.browser.find_element_by_name('time_of_workout')
 		date_field.clear()
 		date_field.send_keys('2010-06-24')
-		time_field = self.browser.find_element_by_name('time_of_workout_1')
-		time_field.clear()
-		time_field.send_keys('15:15')
 		save_button = self.browser.find_element_by_xpath("//button[@type='submit']")
 		save_button.click()
 		
 		#Now try to reopen the workout and check the date changed
 		self.browser.get(self.live_server_url + '/workout/2/')
 		body = self.browser.find_element_by_tag_name('body')
-		self.assertIn("Thursday 24 June 2010 @ 15:15", body.text)
+		self.assertIn("Thursday 24 June 2010", body.text)
 		self.assertIn("Reaching", body.text)
 		
 		#Now go to the second workout 
@@ -250,19 +243,16 @@ class ExerciseTest(LiveServerTestCase):
 		#And try to edit it
 		self.browser.find_element_by_link_text("Edit this workout").click()
 		self.browser.find_element_by_xpath("//select/option[@value='1']").click()
-		date_field = self.browser.find_element_by_name('time_of_workout_0')
+		date_field = self.browser.find_element_by_name('time_of_workout')
 		date_field.clear()
 		date_field.send_keys('2010-06-23')
-		time_field = self.browser.find_element_by_name('time_of_workout_1')
-		time_field.clear()
-		time_field.send_keys('15:15')
 		save_button = self.browser.find_element_by_xpath("//button[@type='submit']")
 		save_button.click()
 		
 		#Now try to reopen the workout and check the date changed
 		self.browser.get(self.live_server_url + '/workout/2/')
 		body = self.browser.find_element_by_tag_name('body')
-		self.assertIn("Wednesday 23 June 2010 @ 15:15", body.text)
+		self.assertIn("Wednesday 23 June 2010", body.text)
 		self.assertIn("Jumping", body.text)
 		
 		#Now try to follow the Measures Link
@@ -327,7 +317,6 @@ class ExerciseTest(LiveServerTestCase):
 		self.browser.find_element_by_link_text("Add").click()
 		self.browser.find_element_by_xpath("//select/option[@value='3']").click()
 		self.browser.find_element_by_link_text("Today").click()
-		self.browser.find_element_by_link_text("Now").click()
 		save_button = self.browser.find_element_by_xpath("//button[@type='submit']")
 		save_button.click()
 
